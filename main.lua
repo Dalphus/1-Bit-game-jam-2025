@@ -10,13 +10,14 @@ function love.load()
   love.window.setMode(1000, 800, { resizable = true, vsync = false })
 
   -- Global Variables
-  dots = {}
-  dot_size = 40
-  selector = {
+  Dots = {}
+  Dot_size = 40
+  Selector = {
     x = 0,
     y = 0,
     is_active = false,
   }
+  Color = { 0.31, 0.43, 0.24 }
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -24,15 +25,17 @@ end
 
 function love.mousepressed( mouse_x, mouse_y, button )
   if button == 1 then
+    Color = { math.random(), math.random(), math.random(), 1 }
+
     local is_valid = true
     local should_remove = false
     local remove_index = 0
 
-    for i = 1, #dots do
-      local dist = distance( mouse_x, mouse_y, dots[i].x, dots[i].y )
-      if dist < dot_size * 2 then
+    for i = 1, #Dots do
+      local dist = distance( mouse_x, mouse_y, Dots[i].x, Dots[i].y )
+      if dist < Dot_size * 2 then
         is_valid = false
-        if dist < dot_size then
+        if dist < Dot_size then
           should_remove = true
           remove_index = i
         end
@@ -45,16 +48,11 @@ function love.mousepressed( mouse_x, mouse_y, button )
       local dot = {}
       dot.x = mouse_x
       dot.y = mouse_y
-      dot.color = {
-        math.random(),
-        math.random(),
-        math.random(),
-        1
-      }
-      dots[ #dots + 1 ] = dot
+      Dots[ #Dots + 1 ] = dot
+      
     elseif should_remove then
       -- remove the dot
-      table.remove( dots, remove_index )
+      table.remove( Dots, remove_index )
     end
 
     love.mousemoved( mouse_x, mouse_y )
@@ -63,28 +61,27 @@ end
 
 function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
   -- draw circle around dot under cursor
-  for i = 1, #dots do
-    if distance( mouse_x, mouse_y, dots[i].x, dots[i].y ) <= dot_size then
-      selector.x = dots[i].x
-      selector.y = dots[i].y
-      selector.is_active = true
+  for i = 1, #Dots do
+    if distance( mouse_x, mouse_y, Dots[i].x, Dots[i].y ) <= Dot_size then
+      Selector.x = Dots[i].x
+      Selector.y = Dots[i].y
+      Selector.is_active = true
       return
     end
   end
-  selector.is_active = false
+  Selector.is_active = false
 end
 
 function love.draw()
   -- clear the screen
   love.graphics.clear( 0, 0, 0, 1 )
-  for i = 1, #dots do
-    love.graphics.setColor( dots[i].color )
-    love.graphics.circle( "fill", dots[i].x, dots[i].y, dot_size )
+  love.graphics.setColor( unpack( Color ))
+  for i = 1, #Dots do
+    love.graphics.circle( "fill", Dots[i].x, Dots[i].y, Dot_size )
   end
 
-  if selector.is_active then
-    love.graphics.setColor( 1, 0, 0, 1 )
-    love.graphics.circle( "line", selector.x, selector.y, dot_size + 10 )
+  if Selector.is_active then
+    love.graphics.circle( "line", Selector.x, Selector.y, Dot_size + 10 )
   end
 end
 

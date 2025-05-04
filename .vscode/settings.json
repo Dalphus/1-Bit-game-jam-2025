@@ -1,0 +1,13 @@
+{
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "undefined-global",
+        "need-check-nil",
+        "param-type-mismatch"
+    ],
+    "[lua]": {
+        "editor.tabSize": 2,
+        
+    },
+
+}

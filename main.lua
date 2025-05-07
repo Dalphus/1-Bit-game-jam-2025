@@ -8,18 +8,23 @@ require( "Player" )
 require( "UI/Button" )
 require( "Scenes/TitleScreen" )
 require( "Scenes/Lore" )
-require( "Scenes/Asteroids" )
+require( "Scenes.Gameplay" )
 
 function love.load()
   -- Set up the window
   love.window.setMode(1440, 1080, { resizable = true, vsync = false })
 
   -- Global Variables
-  Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+  Color1 = { 1, 1, 1, 1 }
+  Color2 = { 0, 0, 0, 1 }
 
-  
-  local font = love.graphics.getFont()
-  Lore_dump = love.graphics.newText(font, {{1,1,1}, "LORE"})
+
+
+  -- Scene Management
+  Active_Scene = Title_Screen
+  Next_Scene = nil
+  Previous_Scene = nil
+  Transition_Timer = -1
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -31,16 +36,24 @@ function love.mousepressed( mouse_x, mouse_y, button )
     
     setColor1( math.random(), math.random(), math.random() )
   end
+
+  if Active_Scene.mousepressed then
+    Active_Scene.mousepressed( mouse_x, mouse_y, button )
+  end
 end
 
 function love.mousereleased( mouse_x, mouse_y, button)
-  if button == 1 then
-    -- Start_button:mouseEvent()
+
+  if Active_Scene.mousereleased then
+    Active_Scene.mousereleased( mouse_x, mouse_y, button )
   end
 end
 
 function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
 
+  if Active_Scene.mousemoved then
+    Active_Scene.mousemoved( mouse_x, mouse_y, dx, dy, force )
+  end
 end
 
 function love.keypressed( key, scancode, isrepeat )
@@ -48,9 +61,14 @@ function love.keypressed( key, scancode, isrepeat )
   if scancode == "escape" then
     love.event.quit()
   end
+  Active_Scene:keypressed( key, scancode, isrepeat )
   if scancode == "space" then
     print( love.graphics.getWidth(), love.graphics.getHeight() )
     -- fire bullet
+  end
+
+  if Active_Scene.keypressed then
+    Active_Scene.keypressed( key, scancode, isrepeat )
   end
 end
 
@@ -59,17 +77,17 @@ function love.draw()
   love.graphics.clear( unpack( Color2 ))
   useColor1()
 
-  if Start_button:isEnabled() then
-    Start_button:draw()
-    love.graphics.draw(Lore_dump, (love.graphics.getWidth()/2) - (Lore_dump:getWidth()/2), (love.graphics.getHeight()/4) - (Lore_dump:getHeight()/2))
-  end
-
   -- draw the player
   Geraldo:draw()
+
+  Active_Scene.draw()
 end
 
 function love.update( dt )
-  Geraldo:update( dt )
+
+  if Active_Scene.update then
+    Active_Scene.update( dt )
+  end
 end
 
 

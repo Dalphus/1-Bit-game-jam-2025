@@ -3,14 +3,25 @@ require( "UI/Button" )
 
 Title_Screen = ( function()
   local title = "Supernova Drift"
-  local Start_button = Button:new(0, 200, 300, 200, "BCENT")
-  Start_button:setFunction(function() Start_button:disable() end)
+
+  local Start_button = Button:new( 0, 200, 300, 200 )
   Start_button:setText("GO")
 
   return {
     name = "Title Screen",
-    draw = function( self )
+
+    draw = function()
+      Start_button:draw()
     end,
-    1
+
+    mousereleased = function( x, y, button )
+      if button == 1 then
+        Start_button:mouseEvent()
+      end
+    end,
+
+    mousepressed = function( x, y, button )
+      if Start_button:isEnabled() then return end
+    end,
   }
 end)()

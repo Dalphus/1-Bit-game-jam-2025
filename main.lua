@@ -4,6 +4,7 @@ if arg[ 2 ] == "vsc_debug" then
 end
 
 require( "helpers" )
+require( "UI.Button" )
 
 function love.load()
   -- Set up the window
@@ -18,6 +19,7 @@ function love.load()
     is_active = false,
   }
   Color = { 0.31, 0.43, 0.24 }
+  Start_button = Button:new(0, 200, 300, 200, "BCENT")
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -83,6 +85,8 @@ function love.draw()
   if Selector.is_active then
     love.graphics.circle( "line", Selector.x, Selector.y, Dot_size + 10 )
   end
+
+  Start_button:draw()
 end
 
 function love.update( dt )

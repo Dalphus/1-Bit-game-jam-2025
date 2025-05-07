@@ -18,8 +18,6 @@ function love.load()
     y = 0,
     is_active = false,
   }
-  Color = { 0.31, 0.43, 0.24 }
-  Background = { 0, 0, 0, 1}
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -27,7 +25,7 @@ end
 
 function love.mousepressed( mouse_x, mouse_y, button )
   if button == 1 then
-    Color = { math.random(), math.random(), math.random(), 1 }
+    setColor1( math.random(), math.random(), math.random() )
 
     local is_valid = true
     local should_remove = false
@@ -87,7 +85,7 @@ end
 function love.draw()
   -- clear the screen
   love.graphics.clear( 0, 0, 0, 1 )
-  love.graphics.setColor( unpack( Color ))
+  useColor1()
   for i = 1, #Dots do
     love.graphics.circle( "fill", Dots[i].x, Dots[i].y, Dot_size )
   end

@@ -1,15 +1,15 @@
 Player = {}
 Player.__index = Player
 
-function Player:new(x, y, radius, acceleration)
+function Player:new( x, y )
   local player = {
     x = x or 0,
     y = y or 0,
-    radius = radius or 20,
-    vx = 0,
-    vy = 0,
-    acceleration = 100 or acceleration,
-    rotation = math.pi / 2,
+    radius = 20,
+    speed = 0,
+    heading = 0,
+    acceleration = 100,
+    rotation = 0,
   }
   setmetatable(player, self)
   return player
@@ -28,16 +28,10 @@ end
 
 function Player:update(dt)
 
-  -- w goes forward, a and d strafe left and right
-  if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-    self.vx = self.vx + ( self.acceleration * math.cos( self.rotation ) * dt )
-    self.vy = self.vy + ( self.acceleration * math.sin( self.rotation ) * dt )
+  if love.keyboard.isDown( "w ") or love.keyboard.isDown( "up" ) then
+    local theta = self.
   end
 
-  local theta = math.atan2( self.vy, self.vx )
-  self.vx = self.vx - ( 1 * math.cos( theta ) * dt )
-  self.vy = self.vy - ( 1 * math.sin( theta ) * dt )
-
-  self.x = self.x + self.vx * dt
-  self.y = self.y + self.vy * dt
+  self.x = self.x + math.cos( self.heading ) * self.speed * dt
+  self.y = self.y + math.sin( self.heading ) * self.speed * dt
 end

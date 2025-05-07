@@ -7,7 +7,7 @@ require( "helpers" )
 
 function love.load()
   -- Set up the window
-  love.window.setMode(1000, 800, { resizable = true, vsync = false })
+  love.window.setMode(1920, 1440, { resizable = true, vsync = false })
 
   -- Global Variables
   Dots = {}
@@ -18,6 +18,7 @@ function love.load()
     is_active = false,
   }
   Color = { 0.31, 0.43, 0.24 }
+  Background = { 0, 0, 0, 1}
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -72,6 +73,16 @@ function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
   Selector.is_active = false
 end
 
+function love.keypressed( key, scancode, isrepeat )
+  -- quit game if escape is pressed
+  if scancode == "escape" then
+    love.event.quit()
+  end
+  if scancode == "space" then
+    print( love.graphics.getWidth(), love.graphics.getHeight() )
+  end
+end
+
 function love.draw()
   -- clear the screen
   love.graphics.clear( 0, 0, 0, 1 )
@@ -86,10 +97,7 @@ function love.draw()
 end
 
 function love.update( dt )
-  -- quit game if escape is pressed
-  if love.keyboard.isDown( "escape" ) then
-    love.event.quit()
-  end
+  
 end
 
 

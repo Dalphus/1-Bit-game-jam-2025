@@ -18,6 +18,7 @@ function love.load()
     y = 0,
     is_active = false,
   }
+  Geraldo = Player:new( 100, 100, 50 )
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -93,10 +94,12 @@ function love.draw()
   if Selector.is_active then
     love.graphics.circle( "line", Selector.x, Selector.y, Dot_size + 10 )
   end
+
+  Geraldo:draw()
 end
 
 function love.update( dt )
-  
+  Geraldo:update( dt )
 end
 
 

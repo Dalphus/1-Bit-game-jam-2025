@@ -21,11 +21,11 @@ function love.load()
   }
 
   Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
-  -- Start_button = Button:new(0, 200, 300, 200, "BCENT")
-  -- Start_button:setFunction(function() Start_button:disable() end)
-  -- Start_button:setText("GO")
-  -- local font = love.graphics.getFont()
-  -- Lore_dump = love.graphics.newText(font, {{1,1,1}, "LORE"})
+  Start_button = Button:new(0, 200, 300, 200, "BCENT")
+  Start_button:setFunction(function() Start_button:disable() end)
+  Start_button:setText("GO")
+  local font = love.graphics.getFont()
+  Lore_dump = love.graphics.newText(font, {{1,1,1}, "LORE"})
 
   -- Pick random seed
   math.randomseed( os.time() )

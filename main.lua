@@ -4,6 +4,7 @@ if arg[ 2 ] == "vsc_debug" then
 end
 
 require( "helpers" )
+require( "Player" )
 
 function love.load()
   -- Set up the window

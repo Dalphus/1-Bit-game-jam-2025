@@ -8,9 +8,9 @@ function Player:new( x, y )
     rotation = 0,
     vx = 0,
     vy = 0,
-    acceleration = 100,
+    acceleration = 200,
     max_speed = 200,
-    dampening = 0.1,
+    dampening = 0.5,
     particles = {},
   }
   local image = love.graphics.newImage( "assets/ship.png" )
@@ -58,6 +58,25 @@ function Player:update(dt)
     self.vy = self.vy + math.sin( self.rotation ) * self.acceleration * dt
 
     table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, self.rotation + math.pi, .5 ))
+  else
+    self.vx = self.vx - self.vx * self.dampening * dt
+    self.vy = self.vy - self.vy * self.dampening * dt
+  end
+  if love.keyboard.isDown( "a" ) or love.keyboard.isDown( "left" ) then
+    local rotation = self.rotation - math.pi / 2.4
+
+    self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
+    self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
+
+    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .3 ))
+  end
+  if love.keyboard.isDown( "d" ) or love.keyboard.isDown( "right" ) then
+    local rotation = self.rotation + math.pi / 2.4
+
+    self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
+    self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
+
+    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .3 ))
   end
 
   self.x = self.x + self.vx * dt

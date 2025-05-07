@@ -5,10 +5,11 @@ end
 
 require( "helpers" )
 require( "Player" )
+require( "UI.Button" )
 
 function love.load()
   -- Set up the window
-  love.window.setMode(1920, 1440, { resizable = true, vsync = false })
+  love.window.setMode(1440, 1080, { resizable = true, vsync = false })
 
   -- Global Variables
   Dots = {}
@@ -18,6 +19,13 @@ function love.load()
     y = 0,
     is_active = false,
   }
+  Color = { 0.31, 0.43, 0.24 }
+  Start_button = Button:new(0, 200, 300, 200, "BCENT")
+  Start_button:setFunction(function() Start_button:disable() end)
+  Start_button:setText("GO")
+  local font = love.graphics.getFont()
+  Lore_dump = love.graphics.newText(font, {{1,1,1}, "LORE"})
+  Background = { 0, 0, 0, 1}
 
   -- Pick random seed
   math.randomseed( os.time() )
@@ -25,6 +33,8 @@ end
 
 function love.mousepressed( mouse_x, mouse_y, button )
   if button == 1 then
+    if Start_button:isEnabled() then return end
+    
     setColor1( math.random(), math.random(), math.random() )
 
     local is_valid = true
@@ -59,6 +69,12 @@ function love.mousepressed( mouse_x, mouse_y, button )
   end
 end
 
+function love.mousereleased( mouse_x, mouse_y, button)
+  if button == 1 then
+    Start_button:mouseEvent()
+  end
+end
+
 function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
   -- draw circle around dot under cursor
   for i = 1, #Dots do
@@ -86,6 +102,14 @@ function love.draw()
   -- clear the screen
   love.graphics.clear( 0, 0, 0, 1 )
   useColor1()
+  love.graphics.setColor( unpack( Color ))
+  
+  if Start_button:isEnabled() then
+    Start_button:draw()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(Lore_dump, (love.graphics.getWidth()/2) - (Lore_dump:getWidth()/2), (love.graphics.getHeight()/4) - (Lore_dump:getHeight()/2))
+  end
+  
   for i = 1, #Dots do
     love.graphics.circle( "fill", Dots[i].x, Dots[i].y, Dot_size )
   end

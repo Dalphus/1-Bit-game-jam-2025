@@ -21,6 +21,7 @@ function love.load()
   Color = { 0.31, 0.43, 0.24 }
   Start_button = Button:new(0, 200, 300, 200, "BCENT")
   Start_button:setFunction(function() Start_button:disable() end)
+  Start_button:setText("GO")
   local font = love.graphics.getFont()
   Lore_dump = love.graphics.newText(font, {{1,1,1}, "LORE"})
   Background = { 0, 0, 0, 1}
@@ -30,8 +31,8 @@ function love.load()
 end
 
 function love.mousepressed( mouse_x, mouse_y, button )
-  if button == 1 then
-    if Start_button:mouseEvent() then return end
+  if button == 1 then 
+    if Start_button:isEnabled() then return end
     
     Color = { math.random(), math.random(), math.random(), 1 }
 
@@ -67,6 +68,12 @@ function love.mousepressed( mouse_x, mouse_y, button )
   end
 end
 
+function love.mousereleased( mouse_x, mouse_y, button)
+  if button == 1 then
+    Start_button:mouseEvent()
+  end
+end
+
 function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
   -- draw circle around dot under cursor
   for i = 1, #Dots do
@@ -97,6 +104,7 @@ function love.draw()
   
   if Start_button:isEnabled() then
     Start_button:draw()
+    love.graphics.setColor(1, 1, 1)
     love.graphics.draw(Lore_dump, (love.graphics.getWidth()/2) - (Lore_dump:getWidth()/2), (love.graphics.getHeight()/4) - (Lore_dump:getHeight()/2))
   end
   

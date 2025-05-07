@@ -40,21 +40,27 @@ function Button:draw()
     love.graphics.setColor(self.r, self.g, self.b)
   end
 
-  
-  love.graphics.rectangle("fill", self.true_x, self.true_y, self.width, self.height)
-
+  local invert = false
   -- recolor button when user is hovering/clicking 
   if mouseWithin(self) and not self.heldAction then
     if love.mouse.isDown( 1 ) then
-      love.graphics.setColor(self.r * 0.2, self.g * 0.2, self.b * 0.2)
+      love.graphics.rectangle("fill", self.true_x - (self.width * 0.05), self.true_y - (self.height * 0.05), self.width * 1.1, self.height * 1.1)
     else
-      love.graphics.setColor(self.r * 0.8, self.g * 0.8, self.b *0.8)
+      love.graphics.rectangle("fill", self.true_x, self.true_y, self.width, self.height)
+      love.graphics.setColor(1 - self.r, 1 - self.g, 1 - self.b)
+      love.graphics.rectangle("fill", self.true_x + 2, self.true_y + 2, self.width - 4, self.height - 4)
+      invert = true
     end
-    love.graphics.rectangle("fill", self.true_x + 2, self.true_y + 2, self.width - 4, self.height - 4)
+  else
+    love.graphics.rectangle("fill", self.true_x, self.true_y, self.width, self.height)
   end
 
-  love.graphics.setColor(1, 1, 1)
   if self.textObject then
+    if invert then
+      love.graphics.setColor(self.r, self.g, self.b)
+    else
+      love.graphics.setColor(1 - self.r, 1 - self.g, 1 - self.b)
+    end
     love.graphics.draw(self.textObject, self.true_x + (self.width/2) - (self.textObject:getWidth()/2), self.true_y + (self.height/2) - (self.textObject:getHeight()/2))
   end
 end

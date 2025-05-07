@@ -17,12 +17,15 @@ function Button:new(_x, _y, _width, _height, _anchor)
     ["cmdArgs"] = nil,
     ["textObject"] = nil,
     ["heldAction"] = nil,
+    ["enabled"] = true,
   }
   setmetatable(button, Button)
   return button
 end
 
 function Button:draw()
+  if not self.enabled then return end
+
   if self.anchor == "BRIGHT" then
     coordBottomRight(self)
   elseif self.anchor == "BCENT" then
@@ -57,9 +60,11 @@ function Button:draw()
 end
 
 function Button:mouseEvent()
-  if love.mouse.isDown( 1 ) and mouseWithin(self) then
+  if not self.enabled then return end
+  if mouseWithin(self) then
     if self.clickAction then
       self.clickAction(unpack(self.cmdArgs))
+      return true
     end
   end
 end
@@ -88,6 +93,14 @@ end
 function Button:setText(_text)
   local font = love.graphics.getFont()
   self.textObject = love.graphics.newText(font, {{1,1,1}, _text})
+end
+
+function Button:disable()
+  self.enabled = false
+end
+
+function Button:isEnabled()
+  return self.enabled
 end
 
 function mouseWithin(self)

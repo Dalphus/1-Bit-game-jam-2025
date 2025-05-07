@@ -8,7 +8,7 @@ require( "Player" )
 require( "UI/Button" )
 require( "Scenes/TitleScreen" )
 require( "Scenes/Lore" )
-require( "Scenes.Gameplay" )
+require( "Scenes/Gameplay" )
 
 function love.load()
   -- Set up the window

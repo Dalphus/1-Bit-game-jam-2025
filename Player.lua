@@ -13,16 +13,25 @@ function Player:new( x, y )
     dampening = 0.5,
     particles = {},
   }
-  local image = love.graphics.newImage( "assets/ship.png" )
-  local canvas = love.graphics.newCanvas( 100, 100 )
-  love.graphics.setCanvas( canvas )
+  local ship_image = love.graphics.newImage( "Assets/shipBIG.png" )
+  local ship_canvas = love.graphics.newCanvas( 320, 320 )
+  love.graphics.setCanvas( ship_canvas )
   love.graphics.setColor( 1, 1, 1 )
-  love.graphics.draw( image, image:getWidth() / 2, image:getHeight() / 2, math.pi / 2, 1, 1, image:getWidth() / 2, image:getHeight() / 2 )
-  player.image = canvas
+  love.graphics.draw( ship_image, ship_image:getWidth() / 2, ship_image:getHeight() / 2, math.pi / 2, 1, 1, ship_image:getWidth() / 2, ship_image:getHeight() / 2 )
   love.graphics.setCanvas()
-  self.image = canvas
 
-  setmetatable(player, self)
+  player.image = ship_canvas
+
+  local decal_image = love.graphics.newImage( "Assets/pixel.png" )
+  local decal_canvas = love.graphics.newCanvas( 25, 25 )
+  love.graphics.setCanvas( decal_canvas )
+  love.graphics.setColor( 1, 1, 1 )
+  love.graphics.draw( decal_image, 0, 0, 0, 25, 25 )
+  love.graphics.setCanvas()
+
+  player.decal = decal_canvas
+
+  setmetatable(player, Player)
   return player
 end
 
@@ -33,7 +42,8 @@ function Player:draw()
 
   for i in pairs( self.particles ) do
     local particle = self.particles[ i ]
-    love.graphics.circle( "fill", particle.x, particle.y, particle.lifetime * 20 )
+    -- love.graphics.circle( "fill", particle.x, particle.y, particle.lifetime * 25 )
+    love.graphics.draw( self.decal, particle.x, particle.y )
   end
 end
 
@@ -57,7 +67,7 @@ function Player:update(dt)
     self.vx = self.vx + math.cos( self.rotation ) * self.acceleration * dt
     self.vy = self.vy + math.sin( self.rotation ) * self.acceleration * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, self.rotation + math.pi, .5 ))
+    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, self.rotation + math.pi, .3 ))
   else
     self.vx = self.vx - self.vx * self.dampening * dt
     self.vy = self.vy - self.vy * self.dampening * dt
@@ -68,7 +78,7 @@ function Player:update(dt)
     self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
     self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .3 ))
+    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .2 ))
   end
   if love.keyboard.isDown( "d" ) or love.keyboard.isDown( "right" ) then
     local rotation = self.rotation + math.pi / 2.4
@@ -76,7 +86,7 @@ function Player:update(dt)
     self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
     self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .3 ))
+    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .2 ))
   end
 
   self.x = self.x + self.vx * dt

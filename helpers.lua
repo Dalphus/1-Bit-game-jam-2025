@@ -2,7 +2,7 @@ function distance( x1, y1, x2, y2 )
   return math.sqrt(( x2 - x1 ) ^ 2 + ( y2 - y1 ) ^ 2 )
 end
 
-Color1 = { 0.31, 0.43, 0.24, 1 }
+Color1 = { 1, 1, 1, 1 }
 Color2 = { 0, 0, 0, 1 }
 
 function setColor1(r, g, b, a)

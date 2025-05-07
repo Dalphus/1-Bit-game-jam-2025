@@ -8,6 +8,7 @@ Gameplay = ( function()
   return {
     name = "Asteroids",
     draw = function()
+      Geraldo:draw()
     end,
     update = function( dt )
       Geraldo:update( dt )

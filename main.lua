@@ -21,7 +21,7 @@ function love.load()
 
 
   -- Scene Management
-  Active_Scene = Title_Screen
+  Active_Scene = Gameplay
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1
@@ -61,7 +61,7 @@ function love.keypressed( key, scancode, isrepeat )
   if scancode == "escape" then
     love.event.quit()
   end
-  Active_Scene:keypressed( key, scancode, isrepeat )
+  
   if scancode == "space" then
     print( love.graphics.getWidth(), love.graphics.getHeight() )
     -- fire bullet

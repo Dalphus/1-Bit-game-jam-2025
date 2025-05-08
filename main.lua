@@ -12,19 +12,16 @@ require( "Scenes/Gameplay" )
 
 function love.load()
   -- Set up the window
-  
-  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
   love.window.setMode(1440, 1080, { resizable = true, vsync = false })
 
   -- Global Variables
   Color1 = { 1, 1, 1, 1 }
   Color2 = { 0, 0, 0, 1 }
 
-
+  Gameplay:init()
 
   -- Scene Management
   Active_Scene = Gameplay
-  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1

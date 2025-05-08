@@ -3,49 +3,46 @@ require( "UI/Button" )
 require( "Player" )
 
 Gameplay = ( function()
-  local Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 
-  Geraldo.image:newImageData():encode( 'png', 'shipBIG.png' )
-  Geraldo.decal:newImageData():encode( 'png', 'pixel.png' )
+  local Geraldo = Player
+  local bullet_size = 2
+  local bullets = {}
+  local asteroids = {}
 
-  love.graphics.setCanvas()
-
-  print( Geraldo.image:getDimensions() )
-  
   return {
-    name = "Asteroids",
+    name = "Gameplay",
+
+    init = function()
+      Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+    end,
+
+    mousepressed = function( x, y, button )
+      if button == 1 then
+        bullets[ #bullets + 1 ] = Geraldo:fire()
+      end
+    end,
+
     draw = function()
       Geraldo:draw()
-    end,
-    keypressed = function( key )
-      if key == "y" then
-        local image = love.graphics.newImage( "Assets/shipBIG.png" )
-        local canvas = love.graphics.newCanvas( 320, 320 )
-        love.graphics.setCanvas( canvas )
-        love.graphics.setColor( 1, 1, 1 )
-        local scale = 100 / image:getWidth()
-        love.graphics.draw( image, image:getWidth() / 2, image:getHeight() / 2, math.pi / 2, scale, scale, image:getWidth() / 2, image:getHeight() / 2 )
-        love.graphics.setCanvas()
-        
-        Geraldo.image = canvas
 
-        local decal_image = love.graphics.newImage( "Assets/pixel.png" )
-        local decal_canvas = love.graphics.newCanvas( 25, 25 )
-        love.graphics.setCanvas( decal_canvas )
-        love.graphics.setColor( 1, 1, 1 )
-        love.graphics.draw( decal_image, 0, 0, 0, 25, 25 )
-        love.graphics.setCanvas()
-
-        Geraldo.image = decal_canvas
-      elseif key == 'u' then
-        print( Geraldo.image:getDimensions() )
-        Geraldo.image:newImageData():encode( 'png', 'shipBIG.png' )
-        Geraldo.decal:newImageData():encode( 'png', 'pixel.png' )
+      for i = 1, #bullets do
+        local b = bullets[ i ]
+        love.graphics.draw( Geraldo.decal, b.x + bullet_size / 2, b.y + bullet_size / 2, b.rotation, bullet_size, bullet_size, Geraldo.decal:getWidth() / 2, Geraldo.decal:getHeight() / 2 )
       end
-      
     end,
+
     update = function( dt )
       Geraldo:update( dt )
+
+      for i in pairs( bullets ) do
+        local b = bullets[ i ]
+        b.x = b.x + b.vx * dt
+        b.y = b.y + b.vy * dt
+        b.lifetime = b.lifetime - dt
+        if b.lifetime <= 0 then
+          table.remove( bullets, i )
+        end
+      end
     end,
   }
 end)()

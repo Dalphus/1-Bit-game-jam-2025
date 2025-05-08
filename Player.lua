@@ -13,8 +13,9 @@ function Player:new( x, y )
     dampening = 0.5,
     particles = {},
   }
-  local ship_image = love.graphics.newImage( "Assets/shipBIG.png" )
-  local ship_canvas = love.graphics.newCanvas( 320, 320 )
+  ship_image_data = love.image.newImageData( "Assets/shipBIG.png" )
+  ship_image = love.graphics.newImage( ship_image_data )
+  ship_canvas = love.graphics.newCanvas( 320, 320 )
   love.graphics.setCanvas( ship_canvas )
   love.graphics.setColor( 1, 1, 1 )
   love.graphics.draw( ship_image, ship_image:getWidth() / 2, ship_image:getHeight() / 2, math.pi / 2, 1, 1, ship_image:getWidth() / 2, ship_image:getHeight() / 2 )
@@ -22,20 +23,30 @@ function Player:new( x, y )
 
   player.image = ship_canvas
 
-  local decal_image = love.graphics.newImage( "Assets/pixel.png" )
-  local decal_canvas = love.graphics.newCanvas( 25, 25 )
+  decal_image = love.graphics.newImage( "Assets/pixel.png" )
+  decal_canvas = love.graphics.newCanvas( 25, 25 )
   love.graphics.setCanvas( decal_canvas )
   love.graphics.setColor( 1, 1, 1 )
   love.graphics.draw( decal_image, 0, 0, 0, 25, 25 )
   love.graphics.setCanvas()
 
   player.decal = decal_canvas
+  
+  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
 
   setmetatable(player, Player)
   return player
 end
 
 function Player:draw()
+
+  self.image:newImageData():encode( 'png', 'shipBIG.png' )
+  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
+  ship_image_data:encode( 'png', 'shipBIG.png' )
+
+  
+  self.decal:newImageData():encode( 'png', 'pixel.png' )
+
   useColor1()
   love.graphics.circle( "line", self.x, self.y, self.image:getWidth() / 2 )
   love.graphics.draw( self.image, self.x, self.y, self.rotation, 1, 1, self.image:getWidth() / 2, self.image:getHeight() / 2 )

@@ -3,7 +3,14 @@ require( "UI/Button" )
 require( "Player" )
 
 Gameplay = ( function()
-  Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+  local Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+
+  Geraldo.image:newImageData():encode( 'png', 'shipBIG.png' )
+  Geraldo.decal:newImageData():encode( 'png', 'pixel.png' )
+
+  love.graphics.setCanvas()
+
+  print( Geraldo.image:getDimensions() )
   
   return {
     name = "Asteroids",
@@ -30,7 +37,12 @@ Gameplay = ( function()
         love.graphics.setCanvas()
 
         Geraldo.image = decal_canvas
+      elseif key == 'u' then
+        print( Geraldo.image:getDimensions() )
+        Geraldo.image:newImageData():encode( 'png', 'shipBIG.png' )
+        Geraldo.decal:newImageData():encode( 'png', 'pixel.png' )
       end
+      
     end,
     update = function( dt )
       Geraldo:update( dt )

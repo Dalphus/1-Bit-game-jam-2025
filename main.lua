@@ -12,6 +12,8 @@ require( "Scenes/Gameplay" )
 
 function love.load()
   -- Set up the window
+  
+  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
   love.window.setMode(1440, 1080, { resizable = true, vsync = false })
 
   -- Global Variables
@@ -22,6 +24,7 @@ function love.load()
 
   -- Scene Management
   Active_Scene = Gameplay
+  ship_canvas:newImageData():encode( 'png', 'shipBIG.png' )
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1
@@ -74,11 +77,8 @@ end
 
 function love.draw()
   -- clear the screen
-  love.graphics.clear( unpack( Color2 ))
+  -- love.graphics.clear( unpack( Color2 ))
   useColor1()
-
-  -- draw the player
-  Geraldo:draw()
 
   Active_Scene.draw()
 end

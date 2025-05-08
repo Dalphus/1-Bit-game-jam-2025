@@ -6,6 +6,12 @@ Title_Screen = ( function()
 
   local Start_button = Button:new( 570, 600, 300, 200 )
   Start_button:setText("GO")
+  Start_button:setFunction(
+    function ()
+      Next_Scene = Gameplay
+      Transition_Timer = 2
+    end
+  )
 
   return {
     name = "Title Screen",

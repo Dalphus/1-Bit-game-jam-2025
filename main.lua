@@ -82,6 +82,20 @@ end
 
 function love.update( dt )
 
+  -- check if transition timer is active
+  -- start fading color1 into color2
+  -- change scene
+  if Transition_Timer > 0 then
+    Transition_Timer = Transition_Timer - dt
+    if Transition_Timer <= 0 then
+      -- change scene
+      Previous_Scene = Active_Scene
+      Active_Scene = Next_Scene
+      Next_Scene = nil
+      Transition_Timer = -1
+    end
+  end
+
   if Active_Scene.update then
     Active_Scene.update( dt )
   end

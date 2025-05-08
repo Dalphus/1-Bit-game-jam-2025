@@ -4,7 +4,7 @@ require( "UI/Button" )
 Title_Screen = ( function()
   local title = "Supernova Drift"
 
-  local Start_button = Button:new( 0, 200, 300, 200 )
+  local Start_button = Button:new( 570, 600, 300, 200 )
   Start_button:setText("GO")
 
   return {

@@ -14,23 +14,7 @@ function Button:new( _x, _y, _width, _height )
 end
 
 function Button:draw()
-  if not self.enabled then return end
-
-  local invert = false
-  if self:isHovered() and not self.heldAction then
-    if love.mouse.isDown( 1 ) then
-      love.graphics.rectangle( "fill", self.x, self.y, self.width, self.height )
-    else
-      love.graphics.rectangle( "fill", self.x, self.y, self.width, self.height )
-
-      love.graphics.rectangle("fill", self.x + 2, self.y + 2, self.width - 4, self.height - 4)
-      invert = true
-    end
-  else
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-  end
-
-  love.graphics.draw( self.text )
+  
 end
 
 function Button:mouseEvent()

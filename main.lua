@@ -21,7 +21,7 @@ function love.load()
   Gameplay:init()
 
   -- Scene Management
-  Active_Scene = Gameplay
+  Active_Scene = Title_Screen
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1

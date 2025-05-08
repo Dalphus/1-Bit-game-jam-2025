@@ -116,8 +116,6 @@ function love.draw()
 end
 
 function love.update( dt )
-<<<<<<< HEAD
-
   -- check if transition timer is active
   -- start fading color1 into color2
   -- change scene
@@ -135,9 +133,6 @@ function love.update( dt )
   if Active_Scene.update then
     Active_Scene.update( dt )
   end
-=======
-  
->>>>>>> 841d4b0ae362313b87296dc26ea7d453ac2bf997
 end
 
 

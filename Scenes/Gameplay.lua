@@ -1,6 +1,7 @@
 require( "helpers" )
 require( "UI.Button" )
 require( "Player" )
+require( "Asteroids" )
 
 Gameplay = ( function()
 

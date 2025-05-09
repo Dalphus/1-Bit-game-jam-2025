@@ -1,3 +1,5 @@
+require( "helpers" )
+
 Player = {}
 Player.__index = Player
 
@@ -13,27 +15,9 @@ function Player:new( x, y )
     dampening = 0.7,
     particles = {},
   }
-  local image, canvas
-  image = love.graphics.newImage( "Assets/shipNEW.png" )
-  local scale = 140
-  canvas = love.graphics.newCanvas( scale, scale )
-  love.graphics.setCanvas( canvas )
-  love.graphics.setColor( 1, 1, 1 )
-  local w, h = image:getWidth(), image:getHeight()
-  love.graphics.draw( image, scale / 2, scale / 2, math.pi / 2, scale / w, scale / h, w / 2, h / 2 )
-  love.graphics.setCanvas()
 
-  player.image = canvas
-
-  image = love.graphics.newImage( "Assets/pixel.png" )
-  scale = 8
-  canvas = love.graphics.newCanvas( scale, scale )
-  love.graphics.setCanvas( canvas )
-  love.graphics.setColor( 1, 1, 1 )
-  love.graphics.draw( image, 0, 0, 0, scale, scale )
-  love.graphics.setCanvas()
-
-  player.decal = canvas
+  player.image = imageToCanvas( "Assets/shipNEW.png", 140, math.pi / 2 )
+  player.decal = imageToCanvas( "Assets/pixel.png", 8, 0 )
 
   setmetatable( player, Player )
   return player

@@ -19,3 +19,17 @@ end
 function useColor2()
   love.graphics.setColor( unpack( Color2 ))
 end
+
+function imageToCanvas( image, size, angle )
+  if type( image ) == "string" then
+    image = love.graphics.newImage( image )
+  end
+  local canvas = love.graphics.newCanvas( size, size )
+  love.graphics.setCanvas( canvas )
+  love.graphics.setColor( 1, 1, 1 )
+  local w, h = image:getDimensions()
+  love.graphics.draw( image, size / 2, size / 2, angle, size / w, size / h, w / 2, h / 2 )
+  love.graphics.setCanvas()
+  canvas:newImageData():encode( "png", "temp.png" )
+  return canvas
+end

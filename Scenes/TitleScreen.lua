@@ -9,7 +9,7 @@ Title_Screen = ( function()
   Start_button:setFunction(
     function ()
       Next_Scene = Gameplay
-      Transition_Timer = 2
+      Transition_Timer = 1
     end
   )
 

@@ -1,33 +1,33 @@
 require( "helpers" )
 require( "UI.Button" )
 
-Title_Screen = ( function()
-  local title = "Supernova Drift"
+-- Title Screen Button Definitions
+Start_button = Button:new( 570, 600, 300, 200 )
 
-  local Start_button = Button:new( 570, 600, 300, 200 )
-  Start_button:setText("GO")
-  Start_button:setFunction(
-    function ()
-      Next_Scene = Gameplay
-      Transition_Timer = 1
-    end
-  )
+Title_Screen = {
+  title = "Supernova Drift",
 
-  return {
-    name = "Title Screen",
-
-    draw = function()
-      Start_button:draw()
-    end,
-
-    mousereleased = function( x, y, button )
-      if button == 1 then
-        Start_button:mouseEvent()
+  load = function()
+    Start_button:setText("GO")
+    Start_button:setFunction(
+      function ()
+        Next_Scene = Gameplay
+        Transition_Timer = 1
       end
-    end,
+    )
+  end,
 
-    mousepressed = function( x, y, button )
-      if Start_button:isEnabled() then return end
-    end,
-  }
-end)()
+  mousepressed = function( x, y, button )
+    if Start_button:isEnabled() then return end
+  end,
+  
+  mousereleased = function( x, y, button )
+    if button == 1 then
+      Start_button:mouseEvent()
+    end
+  end,
+
+  draw = function()
+    Start_button:draw()
+  end
+}

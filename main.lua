@@ -21,6 +21,7 @@ function love.load()
 
   Main_Camera = Camera:new()
 
+  Title_Screen:load()
   Gameplay:load()
 
   -- Scene Management

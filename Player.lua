@@ -1,6 +1,18 @@
 require( "helpers" )
 
-Player = {}
+-- Constants
+Player = {
+  SIZE = 140,
+  FORWARD_ACCELERATION = 200,
+  STRAFE_ACCELERATION = 200,
+  STRAFE_VECTOR_OFFSET = math.pi / 2.4,
+  DAMPENING = 0.7,
+  MAX_SPEED = 200, -- not implemented yet
+  PARTICLE_LIFETIME = 0.2,
+  PARTICLE_SIZE = 10, -- multiplied by lifetime
+  PARTICLE_DISTANCE = 70,
+  PARTICLE_SPEED = 700,
+}
 Player.__index = Player
 
 function Player:new( x, y )
@@ -10,14 +22,11 @@ function Player:new( x, y )
     rotation = 0,
     vx = 0,
     vy = 0,
-    acceleration = 200,
-    max_speed = 200,
-    dampening = 0.7,
     particles = {},
   }
 
-  player.image = imageToCanvas( "Assets/shipNEW.png", 140, math.pi / 2 )
-  player.decal = imageToCanvas( "Assets/pixel.png", 8, 0 )
+  player.image = imageToCanvas( "Assets/shipNEW.png", Player.SIZE, math.pi / 2 )
+  player.decal = imageToCanvas( "Assets/pixel.png", 8 )
 
   setmetatable( player, Player )
   return player
@@ -25,12 +34,11 @@ end
 
 function Player:draw()
   useColor1()
-  -- love.graphics.circle( "line", self.x, self.y, self.image:getWidth() / 2 )
   love.graphics.draw( self.image, self.x, self.y, self.rotation, 1, 1, self.image:getWidth() / 2, self.image:getHeight() / 2 )
 
   for i in pairs( self.particles ) do
     local p = self.particles[ i ]
-    local size = p.lifetime * 10
+    local size = p.lifetime * Player.PARTICLE_SIZE
     love.graphics.draw( self.decal, p.x + size / 2, p.y + size / 2, p.rotation, size, size, self.decal:getWidth() / 2, self.decal:getHeight() / 2 )
   end
 end
@@ -47,7 +55,7 @@ function Player:fire()
   return bullet
 end
 
-function Player:update(dt)
+function Player:update( dt )
 
   for i in pairs(self.particles) do
     local particle = self.particles[i]
@@ -65,29 +73,29 @@ function Player:update(dt)
   self.rotation = Main_Camera:pointingAngle()
 
   if love.keyboard.isDown( "w" ) or love.keyboard.isDown( "up" ) then
-    self.vx = self.vx + math.cos( self.rotation ) * self.acceleration * dt * 2
-    self.vy = self.vy + math.sin( self.rotation ) * self.acceleration * dt * 2
+    self.vx = self.vx + math.cos( self.rotation ) * Player.FORWARD_ACCELERATION * dt
+    self.vy = self.vy + math.sin( self.rotation ) * Player.FORWARD_ACCELERATION * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, self.rotation + math.pi, .2 ))
+    table.insert( self.particles, self:newParticle( self.rotation + math.pi, Player.PARTICLE_LIFETIME ))
   else
-    self.vx = self.vx - self.vx * self.dampening * dt
-    self.vy = self.vy - self.vy * self.dampening * dt
+    self.vx = self.vx - self.vx * Player.DAMPENING * dt
+    self.vy = self.vy - self.vy * Player.DAMPENING * dt
   end
   if love.keyboard.isDown( "a" ) or love.keyboard.isDown( "left" ) then
-    local rotation = self.rotation - math.pi / 2.4
+    local rotation = self.rotation - Player.STRAFE_VECTOR_OFFSET
 
-    self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
-    self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
+    self.vx = self.vx + math.cos( rotation ) * Player.STRAFE_ACCELERATION * dt
+    self.vy = self.vy + math.sin( rotation ) * Player.STRAFE_ACCELERATION * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .1 ))
+    table.insert( self.particles, self:newParticle( rotation + math.pi, Player.PARTICLE_LIFETIME / 2 ))
   end
   if love.keyboard.isDown( "d" ) or love.keyboard.isDown( "right" ) then
-    local rotation = self.rotation + math.pi / 2.4
+    local rotation = self.rotation + Player.STRAFE_VECTOR_OFFSET
 
-    self.vx = self.vx + math.cos( rotation ) * self.acceleration * dt
-    self.vy = self.vy + math.sin( rotation ) * self.acceleration * dt
+    self.vx = self.vx + math.cos( rotation ) * Player.STRAFE_ACCELERATION * dt
+    self.vy = self.vy + math.sin( rotation ) * Player.STRAFE_ACCELERATION * dt
 
-    table.insert( self.particles, newParticle( self.x, self.y, self.vx, self.vy, rotation + math.pi, .1 ))
+    table.insert( self.particles, self:newParticle( rotation + math.pi, Player.PARTICLE_LIFETIME / 2 ))
   end
 
   self.x = self.x + self.vx * dt
@@ -95,12 +103,12 @@ function Player:update(dt)
 
 end
 
-function newParticle( _x, _y, _vx, _vy, _rotation, _lifetime )
+function Player:newParticle( _rotation, _lifetime )
   return {
-    x = _x + math.cos( _rotation ) * 70,
-    y = _y + math.sin( _rotation ) * 70,
-    vx = _vx + math.cos( _rotation ) * 700,
-    vy = _vy + math.sin( _rotation ) * 700,
+    x = self.x + math.cos( _rotation ) * Player.PARTICLE_DISTANCE,
+    y = self.y + math.sin( _rotation ) * Player.PARTICLE_DISTANCE,
+    vx = self.vx + math.cos( _rotation ) * Player.PARTICLE_SPEED,
+    vy = self.vy + math.sin( _rotation ) * Player.PARTICLE_SPEED,
     rotation = _rotation,
     lifetime = _lifetime,
   }

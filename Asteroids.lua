@@ -38,6 +38,11 @@ function Asteroid:damage( amount )
 end
 
 function Asteroid:destroy()
+  if self.type == "normal_big" then
+    table.insert( Asteroids, Asteroid:new( "normal_small_1", self.x, self.y, 0, 100, 10, 10, 0.1 ))
+    table.insert( Asteroids, Asteroid:new( "normal_small_2", self.x, self.y, 0, 100, -10, -10, -0.1 ))
+    table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
+  end
   -- play sound of some sort
   -- drop collectibles
 end

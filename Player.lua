@@ -23,6 +23,7 @@ function Player:new( x, y )
     vx = 0,
     vy = 0,
     particles = {},
+    health = 10,
   }
 
   player.image = imageToCanvas( "Assets/shipNEW.png", Player.SIZE, math.pi / 2 )
@@ -41,6 +42,11 @@ function Player:draw()
     local size = p.lifetime * Player.PARTICLE_SIZE
     love.graphics.draw( self.decal, p.x + size / 2, p.y + size / 2, p.rotation, size, size, self.decal:getWidth() / 2, self.decal:getHeight() / 2 )
   end
+end
+
+function Player:damage( amount )
+  self.health = self.health - amount
+  -- play sound of some sort
 end
 
 function Player:fire()

@@ -11,6 +11,7 @@ Asteroids = {}
 -- Constants
 BULLET_LIFETIME = 1
 BULLET_SIZE = 2
+PINBALL_COEFFICIENT = 10
 
 Gameplay = {
   load = function()
@@ -66,13 +67,26 @@ Gameplay = {
     for i = 1, #Asteroids do
       local a = Asteroids[ i ]
       if a.health <= 0 then
-        if a.type == "normal_big" then
-          table.insert( Asteroids, Asteroid:new( "normal_small_1", a.x, a.y, 0, 100, 10, 10, 0.1 ))
-          table.insert( Asteroids, Asteroid:new( "normal_small_2", a.x, a.y, 0, 100, -10, -10, -0.1 ))
-          table.insert( Asteroids, Asteroid:new( "normal_small_3", a.x, a.y, 0, 100, -10, 10, -0.1 ))
-        end
         a:destroy()
         table.remove( Asteroids, i )
+        break
+      end
+    end
+
+    -- check player for collisions with asteroids
+    for i = 1, #Asteroids do
+      local a = Asteroids[ i ]
+      if distance( Geraldo.x, Geraldo.y, a.x, a.y ) < a.size / 2 then
+        -- damage player
+        Geraldo:damage( 1 )
+        a:destroy()
+        table.remove( Asteroids, i )
+        -- shake camera
+        Camera:shake( 10, 0.5 )
+        -- throw player back
+        local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
+        Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * PINBALL_COEFFICIENT
+        Geraldo.vy = Geraldo.vy + math.sin( angle ) * a.size * PINBALL_COEFFICIENT
         break
       end
     end

@@ -42,6 +42,10 @@ function Camera:center(_x, _y)
   love.graphics.translate(((self.window_width/2) - mouse_x) * 0.5, ((self.window_height/2) - mouse_y) * 0.5)
 end
 
+function Camera:pointingAngle()
+  local mouse_x, mouse_y = love.mouse.getPosition()
+  return math.atan2(((self.window_height/2) - mouse_y) * 0.5, ((self.window_width/2) - mouse_x) * 0.5) - math.pi
+end
 
 
 

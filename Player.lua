@@ -75,9 +75,10 @@ function Player:update(dt)
     end
   end
 
-  local mouse_x, mouse_y = love.mouse.getPosition()
-  local dx, dy = mouse_x - self.x, mouse_y - self.y
-  self.rotation = math.atan2( dy, dx )
+  --local mouse_x, mouse_y = love.mouse.getPosition()
+  --local dx, dy = mouse_x - self.x, mouse_y - self.y
+  --self.rotation = math.atan2( dy, dx )
+  self.rotation = Main_Camera:pointingAngle()
 
   if love.keyboard.isDown( "w" ) or love.keyboard.isDown( "up" ) then
     self.vx = self.vx + math.cos( self.rotation ) * self.acceleration * dt * 2

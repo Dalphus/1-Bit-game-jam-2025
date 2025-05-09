@@ -5,10 +5,11 @@ end
 
 require( "helpers" )
 require( "Player" )
-require( "UI/Button" )
-require( "Scenes/TitleScreen" )
-require( "Scenes/Lore" )
-require( "Scenes/Gameplay" )
+require( "UI.Button" )
+require( "UI.Camera" )
+require( "Scenes.TitleScreen" )
+require( "Scenes.Lore" )
+require( "Scenes.Gameplay" )
 
 function love.load()
   -- Set up the window
@@ -17,6 +18,8 @@ function love.load()
   -- Global Variables
   Color1 = { 1, 1, 1, 1 }
   Color2 = { 0, 0, 0, 1 }
+
+  Main_Camera = Camera:new()
 
   Gameplay:init()
 
@@ -77,6 +80,7 @@ function love.draw()
   -- love.graphics.clear( unpack( Color2 ))
   useColor1()
 
+  Main_Camera:shake()
   Active_Scene.draw()
 end
 
@@ -98,6 +102,8 @@ function love.update( dt )
   if Active_Scene.update then
     Active_Scene.update( dt )
   end
+
+  Main_Camera:cool(dt)
 end
 
 

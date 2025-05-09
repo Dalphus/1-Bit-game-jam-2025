@@ -65,6 +65,7 @@ function Player:update( dt )
 
   for i = 1, #self.particles do
     local particle = self.particles[ i ]
+    if not particle then break end -- bandaid, find cause later
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
     particle.lifetime = particle.lifetime - dt

@@ -52,6 +52,7 @@ Gameplay = {
       local b = Bullets[ i ]
       for j = 1, #Asteroids do
         local a = Asteroids[ j ]
+        if not b or not a then break end -- bandaid, find cause later
         if distance( b.x, b.y, a.x, a.y ) < a.size / 2 then
           -- remove bullet
           table.remove( Bullets, i )

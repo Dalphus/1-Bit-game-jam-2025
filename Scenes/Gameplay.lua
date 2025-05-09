@@ -45,6 +45,38 @@ Gameplay = {
   end,
 
   update = function( dt )
+
+    -- Compare every bullet with every asteroid
+    for i = 1, #Bullets do
+      local b = Bullets[ i ]
+      for j = 1, #Asteroids do
+        local a = Asteroids[ j ]
+        if distance( b.x, b.y, a.x, a.y ) < a.size / 2 then
+          -- remove bullet
+          table.remove( Bullets, i )
+          i = i - 1
+          -- damage asteroid
+          a:damage( 1 )
+          break
+        end
+      end
+    end
+
+    -- check health of asteroids and destroy them if needed
+    for i = 1, #Asteroids do
+      local a = Asteroids[ i ]
+      if a.health <= 0 then
+        if a.type == "normal_big" then
+          table.insert( Asteroids, Asteroid:new( "normal_small_1", a.x, a.y, 0, 100, 10, 10, 0.1 ))
+          table.insert( Asteroids, Asteroid:new( "normal_small_2", a.x, a.y, 0, 100, -10, -10, -0.1 ))
+          table.insert( Asteroids, Asteroid:new( "normal_small_3", a.x, a.y, 0, 100, -10, 10, -0.1 ))
+        end
+        a:destroy()
+        table.remove( Asteroids, i )
+        break
+      end
+    end
+
     Geraldo:update( dt )
 
     for i = 1, #Asteroids do

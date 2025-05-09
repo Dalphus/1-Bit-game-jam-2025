@@ -4,6 +4,7 @@ Asteroid.__index = Asteroid
 Asteroid.images = {}
 
 function Asteroid:load()
+  love.graphics.setDefaultFilter("nearest", "nearest")
   Asteroid.images = {
     normal_big =     imageToCanvas( "Assets/meteorBIG.png" ),
     normal_small_1 = imageToCanvas( "Assets/fragmentOne.png" ),
@@ -13,7 +14,7 @@ function Asteroid:load()
   }
 end
 
-function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va )
+function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va, _health )
   local asteroid = {
     type = _type or "normal_big",
     x = _x or 0,
@@ -23,6 +24,7 @@ function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va )
     vx = _vx or 0,
     vy = _vy or 0,
     va = _va or 0,
+    health = _health or 1,
     image = Asteroid.images[ _type ] or Asteroid.images[ "normal_big" ],
   }
 
@@ -30,14 +32,14 @@ function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va )
   return asteroid
 end
 
+function Asteroid:damage( amount )
+  self.health = self.health - amount
+  -- play sound of some sort
+end
+
 function Asteroid:destroy()
-  -- remove asteroid from the game
-  for i in pairs( asteroids ) do
-    if asteroids[ i ] == self then
-      table.remove( asteroids, i )
-      break
-    end
-  end
+  -- play sound of some sort
+  -- drop collectibles
 end
 
 function Asteroid:draw()

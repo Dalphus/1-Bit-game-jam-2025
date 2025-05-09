@@ -3,6 +3,7 @@ require( "UI.Button" )
 require( "Player" )
 require( "Asteroids" )
 
+-- Globals
 Geraldo = Player
 Bullets = {}
 Asteroids = {}

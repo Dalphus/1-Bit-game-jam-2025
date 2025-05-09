@@ -36,8 +36,6 @@ end
 
 function love.mousepressed( mouse_x, mouse_y, button )
   if button == 1 then
-    -- if Start_button:isEnabled() then return end
-    
     setColor1( math.random(), math.random(), math.random() )
   end
 

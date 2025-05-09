@@ -1,5 +1,5 @@
 require( "helpers" )
-require( "UI/Button" )
+require( "UI.Button" )
 
 Lore = ( function()
   local font = love.graphics.getFont()

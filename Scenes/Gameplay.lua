@@ -12,7 +12,7 @@ Gameplay = ( function()
   return {
     name = "Gameplay",
 
-    init = function()
+    load = function()
       Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
     end,
 

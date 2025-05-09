@@ -21,7 +21,7 @@ function love.load()
 
   Main_Camera = Camera:new()
 
-  Gameplay:init()
+  Gameplay:load()
 
   -- Scene Management
   Active_Scene = Title_Screen

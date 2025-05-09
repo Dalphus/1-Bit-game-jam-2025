@@ -1,5 +1,5 @@
 require( "helpers" )
-require( "UI/Button" )
+require( "UI.Button" )
 
 Title_Screen = ( function()
   local title = "Supernova Drift"

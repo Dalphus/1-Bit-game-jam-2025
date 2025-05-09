@@ -11,6 +11,7 @@ function Asteroid:load()
     normal_small_2 = imageToCanvas( "Assets/fragmentTwo.png" ),
     normal_small_3 = imageToCanvas( "Assets/fragmentThree.png" ),
     tritium_big =    imageToCanvas( "Assets/fuelBig.png" ),
+    tritium_shard =  imageToCanvas( "Assets/fuelBig.png" ),
   }
 end
 
@@ -42,6 +43,12 @@ function Asteroid:destroy()
     table.insert( Asteroids, Asteroid:new( "normal_small_1", self.x, self.y, 0, 100, 10, 10, 0.1 ))
     table.insert( Asteroids, Asteroid:new( "normal_small_2", self.x, self.y, 0, 100, -10, -10, -0.1 ))
     table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
+  elseif self.type == "tritium_big" then
+    table.insert( Asteroids, Asteroid:new( "normal_small_1", self.x, self.y, 0, 100, 10, 10, 0.1 ))
+    table.insert( Asteroids, Asteroid:new( "tritium_shard", self.x, self.y, 0, 100, -10, -10, -0.1, 9999))
+    table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
+  elseif self.type == "tritium_shard" then
+    Level_Score = Level_Score + 1
   end
   -- play sound of some sort
   -- drop collectibles

@@ -23,12 +23,16 @@ Gameplay = ( function()
     end,
 
     draw = function()
+      Main_Camera:center(Geraldo.x, Geraldo.y)
+      
       Geraldo:draw()
 
       for i = 1, #bullets do
         local b = bullets[ i ]
         love.graphics.draw( Geraldo.decal, b.x + bullet_size / 2, b.y + bullet_size / 2, b.rotation, bullet_size, bullet_size, Geraldo.decal:getWidth() / 2, Geraldo.decal:getHeight() / 2 )
       end
+
+      love.graphics.circle("fill", 0, 0, 25, 50)
     end,
 
     update = function( dt )

@@ -7,6 +7,7 @@ require( "Asteroids" )
 Geraldo = Player
 Bullets = {}
 Asteroids = {}
+Screen_Covered = false
 
 -- Constants
 BULLET_LIFETIME = 1
@@ -16,6 +17,8 @@ SCORE_SIZE = 50
 
 Gameplay = {
   load = function()
+    Asteroids = {}
+    
     Asteroid:load()
     Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
 
@@ -46,8 +49,25 @@ Gameplay = {
       end
     end
     
+    Camera:camOffset()
+
+    -- Fuel celebration
+    if 6 > Transition_Timer and Transition_Timer > 5 then 
+      local pi = math.pi -- lazy
+      local cx = love.graphics.getWidth()/2
+      local cy = love.graphics.getHeight()/2
+      love.graphics.setLineWidth(7)
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(2 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(2 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(3 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(3 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(4 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(4 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(5 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(5 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(6 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(6 * pi / 3))
+      love.graphics.setLineWidth(1)
+    end
+
     Camera:center( Geraldo.x, Geraldo.y )
-    
+
     Geraldo:draw()
 
     for i = 1, #Asteroids do
@@ -61,6 +81,27 @@ Gameplay = {
     end
 
     love.graphics.circle("fill", 0, 0, 25, 50)
+
+    -- level transition
+    if Transition_Timer > 5 then
+      -- purposefully empty
+    elseif Transition_Timer > 3 then
+      love.graphics.origin() -- reset coordinate changes
+      Camera:camOffset()
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (5 - Transition_Timer)/(2), 50)
+    elseif Transition_Timer > 2 then
+      love.graphics.origin() -- reset coordinate changes
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000, 50)  
+      Screen_Covered = true
+    elseif Transition_Timer > 0 then
+      love.graphics.origin() -- reset coordinate changes
+      if Screen_Covered then 
+        Gameplay:load() -- reset the level
+        Screen_Covered = false
+      end
+      Camera:camOffset()
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (Transition_Timer)/(2), 50)
+    end
   end,
 
   update = function( dt )
@@ -79,6 +120,13 @@ Gameplay = {
           a:damage( 1 )
           break
         end
+      end
+
+      -- Check score
+      if Level_Score >= 3 then
+        Level_Score = 0
+        Next_Scene = Gameplay
+        Transition_Timer = 6
       end
     end
 

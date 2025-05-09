@@ -24,6 +24,7 @@ function imageToCanvas( image, size, angle )
   if type( image ) == "string" then
     image = love.graphics.newImage( image )
   end
+  size = size or image:getWidth()
   local canvas = love.graphics.newCanvas( size, size )
   love.graphics.setCanvas( canvas )
   love.graphics.setColor( 1, 1, 1 )

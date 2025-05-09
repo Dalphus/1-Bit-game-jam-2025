@@ -1,13 +1,17 @@
 Asteroid = {}
 Asteroid.__index = Asteroid
 
-Asteroid.images = {
-  normal_big =     love.graphics.newImage( "Assets/meteorBIG.png" ),
-  normal_small_1 = love.graphics.newImage( "Assets/fragmentOne.png" ),
-  normal_small_2 = love.graphics.newImage( "Assets/fragmentTwo.png" ),
-  normal_small_3 = love.graphics.newImage( "Assets/fragmentThree.png" ),
-  tritium_big =    love.graphics.newImage( "Assets/fuelBig.png" ),
-}
+Asteroid.images = {}
+
+function Asteroid:load()
+  Asteroid.images = {
+    normal_big =     imageToCanvas( "Assets/meteorBIG.png" ),
+    normal_small_1 = imageToCanvas( "Assets/fragmentOne.png" ),
+    normal_small_2 = imageToCanvas( "Assets/fragmentTwo.png" ),
+    normal_small_3 = imageToCanvas( "Assets/fragmentThree.png" ),
+    tritium_big =    imageToCanvas( "Assets/fuelBig.png" ),
+  }
+end
 
 function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va )
   local asteroid = {
@@ -18,17 +22,28 @@ function Asteroid:new( _type, _x, _y, _rotation, _size, _vx, _vy, _va )
     size = _size or 50,
     vx = _vx or 0,
     vy = _vy or 0,
-    va = _va or 0
+    va = _va or 0,
+    image = Asteroid.images[ _type ] or Asteroid.images[ "normal_big" ],
   }
 
   setmetatable( asteroid, Asteroid )
   return asteroid
 end
 
+function Asteroid:destroy()
+  -- remove asteroid from the game
+  for i in pairs( asteroids ) do
+    if asteroids[ i ] == self then
+      table.remove( asteroids, i )
+      break
+    end
+  end
+end
+
 function Asteroid:draw()
   useColor1()
-  local image = Asteroid.images[ self.type ]
-  love.graphics.draw( image, self.x, self.y, self.rotation, self.size / 100, self.size / 100, self.image:getWidth() / 2, self.image:getHeight() / 2 )
+  local w, h = self.image:getDimensions()
+  love.graphics.draw( self.image, self.x, self.y, self.rotation, self.size / w, self.size / h, w / 2, h / 2 )
   love.graphics.circle( "line", self.x, self.y, self.size / 2 )
 end
 

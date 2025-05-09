@@ -5,7 +5,7 @@ Player = {
   SIZE = 140,
   FORWARD_ACCELERATION = 200,
   STRAFE_ACCELERATION = 200,
-  STRAFE_VECTOR_OFFSET = math.pi / 2.4,
+  STRAFE_VECTOR_OFFSET = math.pi / 2.4, -- pi / 2 is perpendicular to the forward vector
   DAMPENING = 0.7,
   MAX_SPEED = 200, -- not implemented yet
   PARTICLE_LIFETIME = 0.2,
@@ -57,8 +57,8 @@ end
 
 function Player:update( dt )
 
-  for i in pairs(self.particles) do
-    local particle = self.particles[i]
+  for i in pairs( self.particles ) do
+    local particle = self.particles[ i ]
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
     particle.lifetime = particle.lifetime - dt
@@ -70,7 +70,7 @@ function Player:update( dt )
   --local mouse_x, mouse_y = love.mouse.getPosition()
   --local dx, dy = mouse_x - self.x, mouse_y - self.y
   --self.rotation = math.atan2( dy, dx )
-  self.rotation = Main_Camera:pointingAngle()
+  self.rotation = Camera:pointingAngle()
 
   if love.keyboard.isDown( "w" ) or love.keyboard.isDown( "up" ) then
     self.vx = self.vx + math.cos( self.rotation ) * Player.FORWARD_ACCELERATION * dt

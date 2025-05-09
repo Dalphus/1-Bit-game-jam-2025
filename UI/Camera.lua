@@ -1,39 +1,36 @@
-Camera = {}
+Camera = {
+  impact = 0,
+  cooldown = 0,
+  duration = 0,
+  shake_x = 0,
+  shake_y = 0,
+}
 Camera.__index = Camera
 
-function Camera:new()
-  local camera = {
-    impact = 0,
-    cooldown = 0,
-    duration = 0,
-  }
-
-  camera.window_height = love.graphics.getHeight()
-  camera.window_width = love.graphics.getWidth()
-
-  setmetatable(camera, Camera)
-  return camera
+function Camera:load()
+  self.window_height = love.graphics.getHeight()
+  self.window_width = love.graphics.getWidth()
 end
 
-function Camera:applyShake(_impact, _cooldown)
+function Camera:shake(_impact, _cooldown)
   self.impact = _impact
   self.cooldown = _cooldown
   self.duration = _cooldown
 end
 
-function Camera:cool(dt)
-  self.cooldown = self.cooldown - dt
-  if self.cooldown < 0 then
-    self.impact = 0
-    self.cooldown = 0
-    self.duration = 0
-    return
+function Camera:update(dt)
+  if self.cooldown > 0 then
+    local scale = self.impact * self.cooldown / self.duration
+    self.shake_x, self.shake_y = math.random( -scale, scale ), math.random( -scale, scale )
+
+    self.cooldown = self.cooldown - dt
   end
 end
 
-function Camera:shake()
-  if self.cooldown <= 0 then return end
-  love.graphics.translate(math.random(-self.impact * (self.cooldown/self.duration), self.impact * (self.cooldown/self.duration)), math.random(-self.impact * (self.cooldown/self.duration), self.impact * (self.cooldown/self.duration)))
+function Camera:draw()
+  if self.cooldown > 0 then
+    love.graphics.translate( self.shake_x, self.shake_y )
+  end
 end
 
 function Camera:center(_x, _y)
@@ -46,6 +43,3 @@ function Camera:pointingAngle()
   local mouse_x, mouse_y = love.mouse.getPosition()
   return math.atan2(((self.window_height/2) - mouse_y) * 0.5, ((self.window_width/2) - mouse_x) * 0.5) - math.pi
 end
-
-
-

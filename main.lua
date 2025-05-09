@@ -19,8 +19,7 @@ function love.load()
   Color1 = { 1, 1, 1, 1 }
   Color2 = { 0, 0, 0, 1 }
 
-  Main_Camera = Camera:new()
-
+  Camera:load()
   Title_Screen:load()
   Gameplay:load()
 
@@ -44,7 +43,7 @@ function love.mousepressed( mouse_x, mouse_y, button )
   end
 end
 
-function love.mousereleased( mouse_x, mouse_y, button)
+function love.mousereleased( mouse_x, mouse_y, button )
 
   if Active_Scene.mousereleased then
     Active_Scene.mousereleased( mouse_x, mouse_y, button )
@@ -69,6 +68,10 @@ function love.keypressed( key, scancode, isrepeat )
     -- fire bullet
   end
 
+  if scancode == "space" then
+    Camera:shake( 10, 0.5 )
+  end
+
   if Active_Scene.keypressed then
     Active_Scene.keypressed( key, scancode, isrepeat )
   end
@@ -76,14 +79,16 @@ end
 
 function love.draw()
   -- clear the screen
-  -- love.graphics.clear( unpack( Color2 ))
+  love.graphics.clear( unpack( Color2 ))
   useColor1()
 
-  Main_Camera:shake()
+  Camera:draw()
   Active_Scene.draw()
 end
 
 function love.update( dt )
+  Camera:update( dt )
+
   -- check if transition timer is active
   -- start fading color1 into color2
   -- change scene

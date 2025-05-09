@@ -27,7 +27,7 @@ Gameplay = {
   end,
 
   draw = function()
-    Main_Camera:center(Geraldo.x, Geraldo.y)
+    Camera:center( Geraldo.x, Geraldo.y )
     
     Geraldo:draw()
 

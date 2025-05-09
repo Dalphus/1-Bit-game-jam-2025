@@ -4,7 +4,7 @@ require( "helpers" )
 Player = {
   SIZE = 140,
   FORWARD_ACCELERATION = 200,
-  STRAFE_ACCELERATION = 200,
+  STRAFE_ACCELERATION = 150,
   STRAFE_VECTOR_OFFSET = math.pi / 2.4, -- pi / 2 is perpendicular to the forward vector
   DAMPENING = 0.7,
   MAX_SPEED = 200, -- not implemented yet
@@ -63,13 +63,14 @@ end
 
 function Player:update( dt )
 
-  for i in pairs( self.particles ) do
+  for i = 1, #self.particles do
     local particle = self.particles[ i ]
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
     particle.lifetime = particle.lifetime - dt
     if particle.lifetime <= 0 then
       table.remove( self.particles, i )
+      i = i - 1
     end
   end
 

@@ -12,6 +12,7 @@ require( "Scenes.Lore" )
 require( "Scenes.Gameplay" )
 require( "Scenes.Transition" )
 require( "Scenes.Upgrades" )
+require( "Scenes.GameOver" )
 require( "Asteroid" )
 
 function love.load()
@@ -29,7 +30,8 @@ function love.load()
   Gameplay:load()
   Asteroid:load()
   Upgrade:load()
-  Active_Scene = Gameplay
+  GameOver.load()
+  Active_Scene = GameOver
 
   Level_Score = 0
 

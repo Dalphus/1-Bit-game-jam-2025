@@ -30,9 +30,3 @@ function imageToCanvas( image, size, angle )
   canvas:newImageData():encode( "png", "temp.png" )
   return canvas
 end
-
-function startTransition( scene, time )
-  Transition_Timer = time
-  Transition_Duration = time
-  Next_Scene = scene
-end

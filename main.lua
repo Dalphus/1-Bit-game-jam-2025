@@ -96,12 +96,12 @@ function love.update( dt )
   -- change scene
   if Transition_Timer > 0 then
     Transition_Timer = Transition_Timer - dt
+    setColor1( 1, 1, 1, Transition_Timer / Transition_Duration )
     if Transition_Timer <= Transition_Duration / 2 then
       -- change scene
       Previous_Scene = Active_Scene
       Active_Scene = Next_Scene
       Next_Scene = nil
-      Transition_Timer = -1
     end
   end
 

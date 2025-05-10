@@ -11,7 +11,9 @@ Title_Screen = {
     Start_button:setText("GO")
     Start_button:setFunction(
       function ()
-        startTransition( Gameplay, 2 )
+        Transition_Timer = 2
+        Transition_Duration = 2
+        Next_Scene = Gameplay
       end
     )
   end,

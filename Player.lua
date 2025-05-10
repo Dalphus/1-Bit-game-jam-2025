@@ -67,7 +67,7 @@ end
 
 function Player:update( dt )
 
-  for i = 1, #self.particles do
+  for i = #self.particles, 1, -1 do
     local particle = self.particles[ i ]
     if not particle then break end -- bandaid, find cause later
     particle.x = particle.x + particle.vx * dt
@@ -75,13 +75,9 @@ function Player:update( dt )
     particle.lifetime = particle.lifetime - dt
     if particle.lifetime <= 0 then
       table.remove( self.particles, i )
-      i = i - 1
     end
   end
 
-  --local mouse_x, mouse_y = love.mouse.getPosition()
-  --local dx, dy = mouse_x - self.x, mouse_y - self.y
-  --self.rotation = math.atan2( dy, dx )
   self.rotation = Camera:pointingAngle()
 
   if love.keyboard.isDown( "w" ) or love.keyboard.isDown( "up" ) then
@@ -124,4 +120,8 @@ function Player:newParticle( _rotation, _lifetime )
     rotation = _rotation,
     lifetime = _lifetime,
   }
+end
+
+function Player:getPos()
+  return self.x, self.y
 end

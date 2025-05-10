@@ -26,6 +26,7 @@ Gameplay = {
   LEVEL_DENSITY = 200,
   LEVEL_SHUFFLE_V = 20,
   SAFE_ZONE = 400,
+  FUEL_ASTEROIDS = 4,
   -- Visuals
   SCORE_SIZE = 50,
   PARALLAX_CONSTANT = 0.1,
@@ -34,10 +35,15 @@ Gameplay = {
 
   level_timer = 0,
   enter_animation_duration = 3,
+
+  current_level = 1,
+  level_max_time = 123
 }
 G = Gameplay
 
 function G.load()
+  G.font = love.graphics.newFont( "Assets/Fonts/joystix monospace.otf", 60 )
+
   local screen_width = love.graphics.getWidth()
   local screen_height = love.graphics.getHeight()
 
@@ -69,7 +75,7 @@ function G.load()
     table.insert( Asteroids, asteroid )
   end
 
-  for i = 1, 3 do
+  for i = 1, G.FUEL_ASTEROIDS do
     local ast_x = screen_width / 2
     local ast_y = screen_height / 2
     while (ast_x > (screen_width / 2) - G.SAFE_ZONE and ast_x < (screen_width / 2) + G.SAFE_ZONE) and (ast_y > (screen_height / 2) - G.SAFE_ZONE and ast_y < (screen_height / 2) + G.SAFE_ZONE) do
@@ -178,6 +184,20 @@ function G.draw()
     local t = G.enter_animation_duration - G.level_timer
     love.graphics.circle("fill", w / 2, h / 2, 2000 * t / 2, 50)
   end
+
+  love.graphics.origin()
+  useColor1()
+  local seconds_remaining = math.floor( G.level_max_time - G.level_timer )
+  local minutes_remaining = seconds_remaining / 60
+  local milliseconds_remaining = math.floor(( G.level_max_time - G.level_timer ) * 1000 )
+  local clock_text = ""
+  if seconds_remaining > 60 then
+    clock_text = string.format( "%2d:%02d", minutes_remaining, seconds_remaining % 60 )
+  else
+    clock_text = string.format( "%2d.%003d", seconds_remaining % 60, milliseconds_remaining % 1000 )
+  end
+  local clock = love.graphics.newText( G.font, clock_text )
+  love.graphics.draw( clock, love.graphics.getWidth() / 2 - clock:getWidth() / 2, 30 )
 end
 
 function G.update( dt )
@@ -201,7 +221,7 @@ function G.update( dt )
   end
 
   -- Check score
-  if Level_Score >= 3 then
+  if Level_Score >= G.FUEL_ASTEROIDS then
     Level_Score = 0
     Transition:warpTo( Upgrade, G.LEVEL_TRANSITION_DURATION )
     local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")

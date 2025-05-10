@@ -29,7 +29,7 @@ function love.load()
   Gameplay:load()
   Asteroid:load()
   Upgrade:load()
-  Active_Scene = Title_Screen
+  Active_Scene = Gameplay
 
   Level_Score = 0
 

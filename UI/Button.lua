@@ -34,12 +34,7 @@ function Button:draw()
   else
     coordTopLeft(self)
   end
-  
-  if self.heldAction then
-    love.graphics.setColor(1, 0, 0)
-  else
-    love.graphics.setColor(self.r, self.g, self.b)
-  end
+
 
   local invert = false
   -- recolor button when user is hovering/clicking 
@@ -48,7 +43,7 @@ function Button:draw()
       love.graphics.rectangle("fill", self.true_x - (self.width * 0.05), self.true_y - (self.height * 0.05), self.width * 1.1, self.height * 1.1)
     else
       love.graphics.rectangle("fill", self.true_x, self.true_y, self.width, self.height)
-      love.graphics.setColor(1 - self.r, 1 - self.g, 1 - self.b)
+      love.graphics.setColor(0, 0, 0)
       love.graphics.rectangle("fill", self.true_x + 2, self.true_y + 2, self.width - 4, self.height - 4)
       invert = true
     end
@@ -58,9 +53,9 @@ function Button:draw()
 
   if self.textObject then
     if invert then
-      love.graphics.setColor(self.r, self.g, self.b)
+      useColor1()
     else
-      love.graphics.setColor(1 - self.r, 1 - self.g, 1 - self.b)
+      love.graphics.setColor(0, 0, 0)
     end
     love.graphics.draw(self.textObject, self.true_x + (self.width/2) - (self.textObject:getWidth()/2), self.true_y + (self.height/2) - (self.textObject:getHeight()/2))
   end

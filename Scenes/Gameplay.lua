@@ -196,17 +196,17 @@ function G.update( dt )
   for i = 1, #Asteroids do
     local a = Asteroids[ i ]
     if a.health <= 0 then
-      a:destroy()
       table.remove( Asteroids, i )
-
+      
       if a.type == "tritium_big" or a.type == "tritium_shard" then -- replace at some point
-          for ii = 1, #Fuel_Asteroids do
-            if a == Fuel_Asteroids[ii] then
-              table.remove(Fuel_Asteroids, ii)
-            end
+        for ii = 1, #Fuel_Asteroids do
+          if a == Fuel_Asteroids[ii] then
+            table.remove(Fuel_Asteroids, ii)
           end
         end
-
+      end
+      
+      a:destroy()
       break
     end
   end

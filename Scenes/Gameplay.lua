@@ -31,12 +31,17 @@ Gameplay = {
   PARALLAX_CONSTANT = 0.1,
   SCANNER_RADIUS = 75,
   LEVEL_TRANSITION_DURATION = 7.8,
+
+  level_timer = 0,
+  enter_animation_duration = 3,
 }
 G = Gameplay
 
 function G.load()
   local screen_width = love.graphics.getWidth()
   local screen_height = love.graphics.getHeight()
+
+  G.level_timer = 0
 
   collide = love.audio.newSource( "Assets/Sounds/collide.mp3", "static" )
 
@@ -165,9 +170,19 @@ function G.draw()
     local b = Bullets[ i ]
     love.graphics.draw( Geraldo.decal, b.x + G.BULLET_SIZE / 2, b.y + G.BULLET_SIZE / 2, b.rotation, G.BULLET_SIZE, G.BULLET_SIZE, Geraldo.decal:getWidth() / 2, Geraldo.decal:getHeight() / 2 )
   end
+
+  if G.level_timer < G.enter_animation_duration then
+    if G.level_timer > 1 then warpin_sound:play() end
+
+    local w, h = love.graphics.getDimensions()
+    local t = G.enter_animation_duration - G.level_timer
+    love.graphics.circle("fill", w / 2, h / 2, 2000 * t / 2, 50)
+  end
 end
 
 function G.update( dt )
+  G.level_timer = G.level_timer + dt
+
   -- Compare every bullet with every asteroid
   for i = 1, #Bullets do
     local b = Bullets[ i ]
@@ -183,14 +198,14 @@ function G.update( dt )
         break
       end
     end
+  end
 
-    -- Check score
-    if Level_Score >= 3 then
-      Level_Score = 0
-      Transition:warpTo( Upgrade, G.LEVEL_TRANSITION_DURATION )
-      local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
-      into_lightspeed:play()
-    end
+  -- Check score
+  if Level_Score >= 3 then
+    Level_Score = 0
+    Transition:warpTo( Upgrade, G.LEVEL_TRANSITION_DURATION )
+    local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
+    into_lightspeed:play()
   end
 
   -- check health of asteroids and destroy them if needed

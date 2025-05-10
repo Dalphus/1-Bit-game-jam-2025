@@ -1,7 +1,7 @@
 Upgrade = {
   text = {
     "Warp successful. You've survived… for now.",
-    "Press space to confirm upgrades.",
+    "Press [ space ] to confirm upgrades.",
     "(  Pretend there's a really cool upgrades screen here.  )",
   },
   font_size = 40,
@@ -16,9 +16,9 @@ function Upgrade.update( dt )
 end
 
 function Upgrade.keypressed( key, scancode, isrepeat )
-  if scancode == "space" or scancode == "return" then
+  if scancode == "space" or scancode == "return" and Transition.timer <= 0 then
     Gameplay:load()
-    Transition:fadeTo( Gameplay, 5, { 1, 1, 1 } )
+    Transition:fadeTo( Gameplay, 3.5, { 1, 1, 1 } )
   end
 end
 

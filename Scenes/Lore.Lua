@@ -23,10 +23,13 @@ Lore = {
     "with all of the other desperate civilians escaping Spica's solar",
     "system. Destroy the asteroids with minerals needed for fuel,",
     "collect the scraps. Then warp to the next sector and do it all",
-    "again. Try to outrun all the others. Outrun the sun.",
+    "again. Try to outrun all the others.",
     "",
     "",
-    "Outrun the speed of light.",
+    "Try to outrun the sun.",
+    "",
+    "",
+    "Try to outrun the speed of light.",
     "                                                                 "
   },
   font_size = 25,
@@ -97,7 +100,7 @@ function Lore.keypressed( key, scancode, isrepeat )
   end
 
   if Lore.counters[ #Lore.dump ] == 100 and Transition.timer <= 0 then
-    Transition:fadeTo( Gameplay, 6, { 0, 1, 1 } )
+    Transition:fadeTo( Gameplay, 6, { 1, 1, 1 } )
     local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
     into_lightspeed:play()
   end

@@ -66,7 +66,7 @@ function love.keypressed( key, scancode, isrepeat )
     love.event.quit()
   end
   
-  if scancode == "space" then
+  if scancode == "h" then
     Camera:shake( 10, 0.5 )
     Level_Score = 3
   end

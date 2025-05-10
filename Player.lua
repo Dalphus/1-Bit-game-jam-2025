@@ -63,20 +63,16 @@ end
 
 function Player:update( dt )
 
-  for i = 1, #self.particles do
+  for i = #self.particles, 1, -1 do
     local particle = self.particles[ i ]
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
     particle.lifetime = particle.lifetime - dt
     if particle.lifetime <= 0 then
       table.remove( self.particles, i )
-      i = i - 1
     end
   end
 
-  --local mouse_x, mouse_y = love.mouse.getPosition()
-  --local dx, dy = mouse_x - self.x, mouse_y - self.y
-  --self.rotation = math.atan2( dy, dx )
   self.rotation = Camera:pointingAngle()
 
   if love.keyboard.isDown( "w" ) or love.keyboard.isDown( "up" ) then

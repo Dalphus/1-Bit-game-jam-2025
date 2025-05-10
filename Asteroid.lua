@@ -60,6 +60,9 @@ end
 
 function Asteroid:draw()
   useColor1()
+  if not self.image then
+    self.image = Asteroid.images[ self.type ]
+  end
   local w, h = self.image:getDimensions()
   love.graphics.draw( self.image, self.x, self.y, self.rotation, self.size / w, self.size / h, w / 2, h / 2 )
   love.graphics.circle( "line", self.x, self.y, self.size / 2 )

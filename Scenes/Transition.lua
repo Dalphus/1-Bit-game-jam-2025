@@ -3,9 +3,10 @@ Transition = {
   fade_out_duration = 0,
   fade_color = { 0, 0, 0 },
   timer = -1,
-  sceneChanged = false
+  scene_changed = true,
+  is_fade = false,
+  is_warp = false,
 }
-Active_Scene = Title_Screen
 Next_Scene = nil
 Previous_Scene = nil
 
@@ -14,40 +15,42 @@ function Transition:update( dt )
   if self.timer > 0 then
     self.timer = self.timer - dt
     
-    if self.style == "fade" then
+    if self.is_fade then
 
       local alpha = 0
       if self.timer > self.fade_out_duration then
         alpha = 1 - (self.timer - self.fade_out_duration) / self.fade_in_duration
 
       elseif self.timer > 0 then
-        if not self.sceneChanged then
-          self.sceneChanged = true
+        if not self.scene_changed then
+          self.scene_changed = true
           Previous_Scene = Active_Scene
           Active_Scene = Next_Scene
         end
 
         alpha = (self.timer / self.fade_out_duration)
+      else
+        self.is_fade = false
       end
 
       self.fade_color[ 4 ] = alpha
-    elseif self.style == "warp" then
+    elseif self.is_warp then
     end
   end
 end
 
 function Transition:draw()
+  love.graphics.origin()
 
   if self.timer > 0 then
-    if self.style == "fade" then
+    if self.is_fade then
       love.graphics.setColor( unpack( self.fade_color ))
       love.graphics.rectangle( "fill", 0, 0, love.graphics.getDimensions() )
-
-    elseif self.style == "warp" then
+    end
+    if self.is_warp then
       local w, h = love.graphics.getDimensions()
       useColor1()
       
-      love.graphics.origin()
       Camera:camOffset()
 
       -- lines
@@ -67,12 +70,12 @@ function Transition:draw()
         love.graphics.circle("fill", w / 2, h / 2, 2000 * ( 5 - self.timer ) / 2, 50 )
       elseif self.timer > 2 then
         love.graphics.circle("fill", w / 2, h / 2, 2000, 50 )
-        Screen_Covered = true
       else
         love.graphics.origin()
-        if Screen_Covered then
+        if not self.scene_changed then
           Gameplay:load() -- reset the level
-          Screen_Covered = false
+          self.scene_changed = true
+          Active_Scene = Next_Scene
         end
         warpin_sound:play()
         Camera:camOffset()
@@ -83,21 +86,21 @@ function Transition:draw()
 end
 
 function Transition:fadeTo( scene, duration, color )
-  self.style = "fade"
+  self.is_fade = true
   self.fade_color = color or Color2
   self.fade_in_duration = duration / 2
   self.fade_out_duration = duration / 2
   self.timer = duration
-  self.sceneChanged = false
+  self.scene_changed = false
 
   Next_Scene = scene
   Previous_Scene = Active_Scene
 end
 
 function Transition:warpTo( scene, duration )
-  self.style = "warp"
+  self.is_warp = true
   self.timer = duration
-  self.sceneChanged = false
+  self.scene_changed = false
 
   Next_Scene = scene
   Previous_Scene = Active_Scene

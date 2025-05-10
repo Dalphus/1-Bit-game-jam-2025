@@ -1,7 +1,7 @@
 require( "helpers" )
 require( "UI.Button" )
 require( "Player" )
-require( "Asteroids" )
+require( "Asteroid" )
 
 -- Globals
 Geraldo = Player
@@ -186,7 +186,7 @@ function G.update( dt )
     -- Check score
     if Level_Score >= 3 then
       Level_Score = 0
-      Transition:warpTo( "Title_Screen", 8.26 )
+      Transition:warpTo( Title_Screen, 8.26 )
       local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
       into_lightspeed:play()
     end

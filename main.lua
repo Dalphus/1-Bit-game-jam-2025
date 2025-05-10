@@ -11,24 +11,23 @@ require( "Scenes.TitleScreen" )
 require( "Scenes.Lore" )
 require( "Scenes.Gameplay" )
 require( "Scenes.Transition" )
-require( "Asteroids" )
+require( "Asteroid" )
 
 function love.load()
   -- Set up the window
   love.window.setMode(1440, 1080, { resizable = true, vsync = false })
 
-  -- Global Variables
+  -- 1-bit Colors
   Color1 = { 1, 1, 1, 1 }
   Color2 = { 0, 0, 0, 1 }
 
-  
-  Asteroid:load()
+  -- Scene Management
   Camera:load()
   Title_Screen:load()
+  Lore.load()
   Gameplay:load()
-
-  -- Scene Management
-  -- Transition:load()
+  Asteroid:load()
+  Active_Scene = Title_Screen
 
   Level_Score = 0
 

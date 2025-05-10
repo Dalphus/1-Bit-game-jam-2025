@@ -33,10 +33,15 @@ function Camera:draw()
   end
 end
 
-function Camera:center(_x, _y)
-  love.graphics.translate((self.window_width/2) - _x, (self.window_height/2)-_y)
+function Camera:center(_x, _y, _offset)
+  local offset = _offset or 1
+  love.graphics.translate(((self.window_width/2) - _x) * offset, ((self.window_height/2) - _y) * offset)
+end
+
+function  Camera:camOffset(_offset)
+  local offset = _offset or 1
   local mouse_x, mouse_y = love.mouse.getPosition()
-  love.graphics.translate(((self.window_width/2) - mouse_x) * 0.5, ((self.window_height/2) - mouse_y) * 0.5)
+  love.graphics.translate((((self.window_width/2) - mouse_x) * 0.33) * offset, (((self.window_height/2) - mouse_y) * 0.33) * offset)
 end
 
 function Camera:pointingAngle()

@@ -28,6 +28,7 @@ function love.load()
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1
+  Level_Score = 0
 
   -- Pick random seed
   math.randomseed( os.time() )

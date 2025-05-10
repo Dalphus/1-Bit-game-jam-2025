@@ -14,6 +14,7 @@ BULLET_LIFETIME = 1
 BULLET_SIZE = 2
 PINBALL_COEFFICIENT = 10
 SCORE_SIZE = 50
+PARALLAX_CONSTANT = 0.1
 
 Gameplay = {
   load = function()
@@ -27,6 +28,8 @@ Gameplay = {
     table.insert( Asteroids, Asteroid:new( "tritium_big", -1300, -300, 0, 300, 0, 0, 0, 0.1))
     table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))
 
+    star_background_1 = imageToCanvas( "Assets/pixil-frame-0.png" )
+
     Score_Image =  imageToCanvas( "Assets/fuelBig.png" )
     sw, sh = Score_Image:getDimensions()
   end,
@@ -38,6 +41,28 @@ Gameplay = {
   end,
 
   draw = function()
+    local bg_offset_x = -1250 -- Geraldo.x - (Geraldo.x % 2500) - (love.graphics.getWidth()/2)
+    local bg_offset_y = -1250 -- Geraldo.y - (Geraldo.y % 2500) - (love.graphics.getHeight()/2)
+    
+    -- Should look into a way to get this to repeat
+    -- paralax slow section
+    Camera:camOffset(PARALLAX_CONSTANT)
+    Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT )
+    love.graphics.draw(star_background_1, bg_offset_x - 200, bg_offset_y, 0, 5, 5)
+
+    -- paralax mid section
+    Camera:camOffset(PARALLAX_CONSTANT)
+    Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT )
+    love.graphics.draw(star_background_1, bg_offset_x, bg_offset_y - 250, 0, 5, 5)
+
+    -- paralax fast section
+    Camera:camOffset(PARALLAX_CONSTANT)
+    Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT )
+    love.graphics.draw(star_background_1, bg_offset_x, bg_offset_y, 0, 5, 5)
+
+    -- reset graphics transforms
+    love.graphics.origin()
+    
     -- draw collected resources
     if Level_Score > 0 then
       love.graphics.draw( Score_Image, love.graphics.getWidth() - (SCORE_SIZE * 0.6), 30, 0, SCORE_SIZE / sw, SCORE_SIZE / sh, sw / 2, sh / 2 )

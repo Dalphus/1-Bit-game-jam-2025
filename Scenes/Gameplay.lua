@@ -34,7 +34,7 @@ Gameplay = {
     table.insert( Asteroids, Asteroid:new( "tritium_big", -1300, -300, 0, 300, 0, 0, 0, 0.1))
     table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))
 
-    star_background_1 = imageToCanvas( "Assets/pixil-frame-0.png" )
+    star_background_1 = imageToCanvas( "Assets/big-stars-splash.png" )
 
     Score_Image =  imageToCanvas( "Assets/fuelBig.png" )
     sw, sh = Score_Image:getDimensions()
@@ -75,7 +75,9 @@ Gameplay = {
     local bg_offset_y = -1250 -- Geraldo.y - (Geraldo.y % 2500) - (love.graphics.getHeight()/2)
     
     -- Should look into a way to get this to repeat
-    -- paralax still section
+    -- paralax very slow section
+    Camera:camOffset(PARALLAX_CONSTANT * 0.1)
+    Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT * 0.1)
     love.graphics.draw(star_background_1, bg_offset_x - 200, bg_offset_y, 0, 5, 5)
 
     -- paralax slow section

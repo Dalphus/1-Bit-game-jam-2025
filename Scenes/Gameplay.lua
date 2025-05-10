@@ -35,6 +35,7 @@ Gameplay = {
     table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))
 
     star_background_1 = imageToCanvas( "Assets/big-stars-splash.png" )
+    warpin_sound = love.audio.newSource("Assets/Sounds/whooshin.mp3", "static")
 
     Score_Image =  imageToCanvas( "Assets/fuelBig.png" )
     sw, sh = Score_Image:getDimensions()
@@ -154,6 +155,7 @@ Gameplay = {
         Gameplay:load() -- reset the level
         Screen_Covered = false
       end
+      warpin_sound:play()
       Camera:camOffset()
       love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (Transition_Timer)/(2), 50)
     end
@@ -181,7 +183,9 @@ Gameplay = {
       if Level_Score >= 3 then
         Level_Score = 0
         Next_Scene = Gameplay
-        Transition_Timer = 6
+        Transition_Timer = 8.26
+        local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
+        into_lightspeed:play()
       end
     end
 

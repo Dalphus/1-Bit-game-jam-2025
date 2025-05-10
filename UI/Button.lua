@@ -18,6 +18,7 @@ function Button:new(_x, _y, _width, _height, _anchor)
     ["textObject"] = nil,
     ["heldAction"] = nil,
     ["enabled"] = true,
+    ["audio"] = nil
   }
   setmetatable(button, Button)
   return button
@@ -68,6 +69,7 @@ end
 function Button:mouseEvent()
   if not self.enabled then return end
   if mouseWithin(self) then
+    if self.audio then love.audio.play(self.audio) end
     if self.clickAction then
       self.clickAction(unpack(self.cmdArgs))
       return true
@@ -107,6 +109,10 @@ end
 
 function Button:isEnabled()
   return self.enabled
+end
+
+function Button:setAudio(_audio)
+  self.audio = _audio
 end
 
 function mouseWithin(self)

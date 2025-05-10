@@ -15,6 +15,7 @@ Title_Screen = {
         Transition_Timer = 1
       end
     )
+    Start_button:setAudio(love.audio.newSource("Assets/Sounds/button-8-88355.mp3", "static"))
   end,
 
   mousepressed = function( x, y, button )

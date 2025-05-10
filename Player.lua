@@ -28,6 +28,8 @@ function Player:new( x, y )
 
   player.image = imageToCanvas( "Assets/shipNEW.png", Player.SIZE, math.pi / 2 )
   player.decal = imageToCanvas( "Assets/pixel.png", 8 )
+  player.shoot_audio = love.audio.newSource("Assets/Sounds/gun.mp3", "static")
+  player.shoot_audio:setVolume(0.5)
 
   setmetatable( player, Player )
   return player
@@ -58,6 +60,8 @@ function Player:fire()
     vx = self.vx + math.cos( self.rotation ) * 1000,
     vy = self.vy + math.sin( self.rotation ) * 1000
   }
+  local shoot_audio = self.shoot_audio:clone()
+  shoot_audio:play()
   return bullet
 end
 

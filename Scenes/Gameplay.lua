@@ -15,7 +15,7 @@ Gameplay = {
   -- Player Physics
   BULLET_LIFETIME = 1,
   BULLET_SIZE = 2,
-  PINBALL_COEFFICIENT = 2,
+  PINBALL_COEFFICIENT = 1.2,
   -- Asteroids
   LEFT_WALL = -7000,
   RIGHT_WALL = 7000,
@@ -43,6 +43,7 @@ G = Gameplay
 
 function G.load()
   G.font = love.graphics.newFont( "Assets/Fonts/joystix monospace.otf", 60 )
+  G.font_small = love.graphics.newFont( "Assets/Fonts/joystix monospace.otf", 30 )
 
   local screen_width = love.graphics.getWidth()
   local screen_height = love.graphics.getHeight()
@@ -187,6 +188,11 @@ function G.draw()
 
   love.graphics.origin()
   useColor1()
+
+  love.graphics.setFont( G.font_small )
+  love.graphics.print("Level " .. G.current_level, 30, 30)
+  love.graphics.print("Health: " .. Geraldo.health, 30, 90)
+
   local seconds_remaining = math.floor( G.level_max_time - G.level_timer )
   local minutes_remaining = seconds_remaining / 60
   local milliseconds_remaining = math.floor(( G.level_max_time - G.level_timer ) * 1000 )
@@ -226,6 +232,10 @@ function G.update( dt )
     Transition:warpTo( Upgrade, G.LEVEL_TRANSITION_DURATION )
     local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
     into_lightspeed:play()
+  end
+  if ( G.level_timer > G.level_max_time or Geraldo.health <= 0 ) and Transition.timer <= 0 then
+    Transition:fadeTo( GameOver, 3.5, { 0, 0, 0 } )
+    love.audio.newSource("Assets/Sounds/videogame-death-sound-43894.mp3", "static"):play()
   end
 
   -- check health of asteroids and destroy them if needed

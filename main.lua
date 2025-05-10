@@ -31,7 +31,7 @@ function love.load()
   Asteroid:load()
   Upgrade:load()
   GameOver.load()
-  Active_Scene = GameOver
+  Active_Scene = Gameplay
 
   Level_Score = 0
 

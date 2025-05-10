@@ -18,6 +18,7 @@ end
 function Upgrade.keypressed( key, scancode, isrepeat )
   if scancode == "space" or scancode == "return" and Transition.timer <= 0 then
     Gameplay:load()
+    G.LEVEL_DENSITY = G.LEVEL_DENSITY + 200
     Transition:fadeTo( Gameplay, 3.5, { 1, 1, 1 } )
   end
 end

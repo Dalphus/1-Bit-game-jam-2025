@@ -10,6 +10,7 @@ require( "UI.Camera" )
 require( "Scenes.TitleScreen" )
 require( "Scenes.Lore" )
 require( "Scenes.Gameplay" )
+require( "Scenes.Transition" )
 
 function love.load()
   -- Set up the window
@@ -24,11 +25,8 @@ function love.load()
   Gameplay:load()
 
   -- Scene Management
-  Active_Scene = Title_Screen
-  Next_Scene = nil
-  Previous_Scene = nil
-  Transition_Timer = -1
-  Transition_Duration = -1
+  -- Transition:load()
+
   Level_Score = 0
 
   -- Pick random seed
@@ -67,6 +65,7 @@ function love.keypressed( key, scancode, isrepeat )
   
   if scancode == "space" then
     print( love.graphics.getWidth(), love.graphics.getHeight() )
+    Level_Score = 3
     -- fire bullet
   end
 
@@ -82,28 +81,17 @@ end
 function love.draw()
   -- clear the screen
   love.graphics.clear( unpack( Color2 ))
-  useColor1()
-
+  
   Camera:draw()
   Active_Scene.draw()
+
+  love.graphics.origin()
+  Transition:draw()
 end
 
 function love.update( dt )
   Camera:update( dt )
-
-  -- check if transition timer is active
-  -- start fading color1 into color2
-  -- change scene
-  if Transition_Timer > 0 then
-    Transition_Timer = Transition_Timer - dt
-    setColor1( 1, 1, 1, Transition_Timer / Transition_Duration )
-    if Transition_Timer <= Transition_Duration / 2 then
-      -- change scene
-      Previous_Scene = Active_Scene
-      Active_Scene = Next_Scene
-      Next_Scene = nil
-    end
-  end
+  Transition:update( dt )
 
   if Active_Scene.update then
     Active_Scene.update( dt )

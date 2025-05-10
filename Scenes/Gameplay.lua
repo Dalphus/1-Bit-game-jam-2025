@@ -77,6 +77,7 @@ Gameplay = {
     local bg_offset_x = -1250 -- Geraldo.x - (Geraldo.x % 2500) - (love.graphics.getWidth()/2)
     local bg_offset_y = -1250 -- Geraldo.y - (Geraldo.y % 2500) - (love.graphics.getHeight()/2)
     
+    useColor1()
     -- Should look into a way to get this to repeat
     -- paralax very slow section
     Camera:camOffset(PARALLAX_CONSTANT * 0.1)
@@ -110,17 +111,18 @@ Gameplay = {
     Camera:camOffset()
 
     -- Fuel celebration
-    if 6 > Transition_Timer and Transition_Timer > 5 then 
+    if 6 > Transition.timer and Transition.timer > 4 then
+      useColor1()
       local pi = math.pi -- lazy
       local cx = love.graphics.getWidth()/2
       local cy = love.graphics.getHeight()/2
       love.graphics.setLineWidth(7)
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(pi / 3))
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(2 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(2 * pi / 3))
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(3 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(3 * pi / 3))
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(4 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(4 * pi / 3))
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(5 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(5 * pi / 3))
-      love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(6 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(6 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(2 * pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(2 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(3 * pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(3 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(4 * pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(4 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(5 * pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(5 * pi / 3))
+      love.graphics.line(cx, cy, cx + (6 - Transition.timer) * 800 * math.cos(6 * pi / 3), cy + (6 - Transition.timer) * 800 * math.sin(6 * pi / 3))
       love.graphics.setLineWidth(1)
     end
 
@@ -138,20 +140,21 @@ Gameplay = {
       love.graphics.draw( Geraldo.decal, b.x + BULLET_SIZE / 2, b.y + BULLET_SIZE / 2, b.rotation, BULLET_SIZE, BULLET_SIZE, Geraldo.decal:getWidth() / 2, Geraldo.decal:getHeight() / 2 )
     end
 
+    -- show origin of asteroid field
     love.graphics.circle("fill", 0, 0, 25, 50)
 
     -- level transition
-    if Transition_Timer > 5 then
+    if Transition.timer > 5 then
       -- purposefully empty
-    elseif Transition_Timer > 3 then
+    elseif Transition.timer > 3 then
       love.graphics.origin() -- reset coordinate changes
       Camera:camOffset()
-      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (5 - Transition_Timer)/(2), 50)
-    elseif Transition_Timer > 2 then
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (5 - Transition.timer)/(2), 50)
+    elseif Transition.timer > 2 then
       love.graphics.origin() -- reset coordinate changes
-      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000, 50)  
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000, 50)
       Screen_Covered = true
-    elseif Transition_Timer > 0 then
+    elseif Transition.timer > 0 then
       love.graphics.origin() -- reset coordinate changes
       if Screen_Covered then 
         Gameplay:load() -- reset the level
@@ -159,7 +162,7 @@ Gameplay = {
       end
       warpin_sound:play()
       Camera:camOffset()
-      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (Transition_Timer)/(2), 50)
+      love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (Transition.timer)/(2), 50)
     end
   end,
 
@@ -185,7 +188,7 @@ Gameplay = {
       if Level_Score >= 3 then
         Level_Score = 0
         Next_Scene = Gameplay
-        Transition_Timer = 8.26
+        Transition.timer = 8.26
         local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
         into_lightspeed:play()
       end

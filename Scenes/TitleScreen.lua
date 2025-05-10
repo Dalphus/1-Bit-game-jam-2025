@@ -11,9 +11,7 @@ Title_Screen = {
     Start_button:setText("GO")
     Start_button:setFunction(
       function ()
-        Transition_Timer = 2
-        Transition_Duration = 2
-        Next_Scene = Gameplay
+        Transition:fadeTo( Gameplay, 5 )
       end
     )
     Start_button:setAudio(love.audio.newSource("Assets/Sounds/button-8-88355.mp3", "static"))

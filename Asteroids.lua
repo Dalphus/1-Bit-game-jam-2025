@@ -46,7 +46,9 @@ function Asteroid:destroy()
     table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
   elseif self.type == "tritium_big" then
     table.insert( Asteroids, Asteroid:new( "normal_small_1", self.x, self.y, 0, 100, 10, 10, 0.1 ))
-    table.insert( Asteroids, Asteroid:new( "tritium_shard", self.x, self.y, 0, 100, -10, -10, -0.1, 9999))
+    local shard = Asteroid:new( "tritium_shard", self.x, self.y, 0, 100, -10, -10, -0.1, 9999)
+    table.insert( Asteroids, shard)
+    table.insert( Fuel_Asteroids, shard)
     table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
   elseif self.type == "tritium_shard" then
     Level_Score = Level_Score + 1

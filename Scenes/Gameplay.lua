@@ -7,12 +7,13 @@ require( "Asteroids" )
 Geraldo = Player
 Bullets = {}
 Asteroids = {}
+Fuel_Asteroids = {}
 Screen_Covered = false
 
 -- Constants
 BULLET_LIFETIME = 1
 BULLET_SIZE = 2
-PINBALL_COEFFICIENT = 10
+PINBALL_COEFFICIENT = 2
 SCORE_SIZE = 50
 PARALLAX_CONSTANT = 0.1
 LEFT_WALL = -7000
@@ -24,6 +25,7 @@ WALL_SHUFFLE = 300
 LEVEL_DENSITY = 200
 LEVEL_SHUFFLE_V = 10
 SAFE_ZONE = 400
+SCANNER_RADIUS = 75
 
 Gameplay = {
   load = function()
@@ -33,6 +35,7 @@ Gameplay = {
     collide = love.audio.newSource("Assets/Sounds/collide.mp3", "static")
     
     Asteroids = {}
+    Fuel_Asteroids = {}
     
     Asteroid:load()
     Geraldo = Player:new( screen_width / 2, screen_height / 2 )
@@ -44,14 +47,20 @@ Gameplay = {
         ast_x = math.random(LEFT_WALL, RIGHT_WALL)
         ast_y = math.random(BOTTOM_WALL, TOP_WALL)
       end
-      table.insert( Asteroids, Asteroid:new( "normal_big", ast_x, ast_y, 0, 500, math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), 0 ))
+      table.insert( Asteroids, Asteroid:new( "normal_big", ast_x, ast_y, 0, 350, math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), 0 ))
     end
     
-
-    -- constant for now
-    table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -300, 0, 300, 0, 0, 0, 0.1))
-    table.insert( Asteroids, Asteroid:new( "tritium_big", -1300, -300, 0, 300, 0, 0, 0, 0.1))
-    table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))
+    for i = 1, 3 do
+      local ast_x = screen_width / 2
+      local ast_y = screen_height / 2
+      while (ast_x > (screen_width / 2) - SAFE_ZONE and ast_x < (screen_width / 2) + SAFE_ZONE) and (ast_y > (screen_height / 2) - SAFE_ZONE and ast_y < (screen_height / 2) + SAFE_ZONE) do
+        ast_x = math.random(LEFT_WALL, RIGHT_WALL)
+        ast_y = math.random(BOTTOM_WALL, TOP_WALL)
+      end
+      local fuel = Asteroid:new( "tritium_big", ast_x, ast_y, 0, 300, math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), 0.1 )
+      table.insert( Asteroids, fuel)
+      table.insert( Fuel_Asteroids, fuel)
+    end
 
     star_background_1 = imageToCanvas( "Assets/big-stars-splash.png" )
     warpin_sound = love.audio.newSource("Assets/Sounds/whooshin.mp3", "static")
@@ -126,11 +135,12 @@ Gameplay = {
     
     Camera:camOffset()
 
+    local cx = love.graphics.getWidth()/2
+    local cy = love.graphics.getHeight()/2
+
     -- Fuel celebration
     if 6 > Transition_Timer and Transition_Timer > 5 then 
       local pi = math.pi -- lazy
-      local cx = love.graphics.getWidth()/2
-      local cy = love.graphics.getHeight()/2
       love.graphics.setLineWidth(7)
       love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(pi / 3))
       love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(2 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(2 * pi / 3))
@@ -139,6 +149,13 @@ Gameplay = {
       love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(5 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(5 * pi / 3))
       love.graphics.line(cx, cy, cx + (6 - Transition_Timer) * 800 * math.cos(6 * pi / 3), cy + (6 - Transition_Timer) * 800 * math.sin(6 * pi / 3))
       love.graphics.setLineWidth(1)
+    end
+
+    -- Fuel pointers
+    for i = 1, #Fuel_Asteroids do
+      local a = Fuel_Asteroids[i]
+      local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
+      love.graphics.circle("fill", cx - (SCANNER_RADIUS * math.cos(angle)), cy - (SCANNER_RADIUS * math.sin(angle)), 8, 50)
     end
 
     Camera:center( Geraldo.x, Geraldo.y )
@@ -214,6 +231,15 @@ Gameplay = {
       if a.health <= 0 then
         a:destroy()
         table.remove( Asteroids, i )
+        
+        if a.type == "tritium_big" or a.type == "tritium_shard" then -- replace at some point
+          for ii = 1, #Fuel_Asteroids do
+            if a == Fuel_Asteroids[ii] then
+              table.remove(Fuel_Asteroids, ii)
+            end
+          end
+        end
+
         break
       end
     end
@@ -228,7 +254,14 @@ Gameplay = {
         a:destroy()
         
         -- for fuel, don't do anything but destroy the object.
-        if a.type == "tritium_shard" then Good_Collision = true end
+        if a.type == "tritium_shard" then
+          for ii = 1, #Fuel_Asteroids do
+            if a == Fuel_Asteroids[ii] then
+              table.remove(Fuel_Asteroids, ii)
+            end
+          end
+          Good_Collision = true 
+        end
         table.remove( Asteroids, i )
         if Good_Collision then return end
         
@@ -241,8 +274,8 @@ Gameplay = {
         boomsound:play()
         -- throw player back
         local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
-        Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * PINBALL_COEFFICIENT
-        Geraldo.vy = Geraldo.vy + math.sin( angle ) * a.size * PINBALL_COEFFICIENT
+        Geraldo.vx = Geraldo.vx + math.cos( angle ) * math.sqrt(Geraldo.vx^2 + Geraldo.vy^2) * PINBALL_COEFFICIENT
+        Geraldo.vy = Geraldo.vy + math.sin( angle ) * math.sqrt(Geraldo.vx^2 + Geraldo.vy^2) * PINBALL_COEFFICIENT
         break
       end
     end

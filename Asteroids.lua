@@ -2,6 +2,7 @@ Asteroid = {}
 Asteroid.__index = Asteroid
 
 Asteroid.images = {}
+Asteroid.pickup_audio = love.audio.newSource("Assets/Sounds/retro-blip.mp3", "static")
 
 function Asteroid:load()
   love.graphics.setDefaultFilter("nearest", "nearest")
@@ -49,6 +50,7 @@ function Asteroid:destroy()
     table.insert( Asteroids, Asteroid:new( "normal_small_3", self.x, self.y, 0, 100, -10, 10, -0.1 ))
   elseif self.type == "tritium_shard" then
     Level_Score = Level_Score + 1
+    Asteroid.pickup_audio:play()
   end
   -- play sound of some sort
   -- drop collectibles

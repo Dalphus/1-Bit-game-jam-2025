@@ -24,6 +24,8 @@ WALL_SHUFFLE = 300
 
 Gameplay = {
   load = function()
+    collide = love.audio.newSource("Assets/Sounds/collide.mp3", "static")
+    
     Asteroids = {}
     
     Asteroid:load()
@@ -217,6 +219,9 @@ Gameplay = {
         Geraldo:damage( 1 )
         -- shake camera
         Camera:shake( 10, 0.5 )
+        -- play collision sound
+        local boomsound = collide:clone()
+        boomsound:play()
         -- throw player back
         local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
         Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * PINBALL_COEFFICIENT

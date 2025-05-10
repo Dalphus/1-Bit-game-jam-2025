@@ -21,7 +21,7 @@ function Transition:update( dt )
         alpha = 1 - (self.timer - self.fade_out_duration) / self.fade_in_duration
 
       elseif self.timer > 0 then
-        if Next_Scene ~= nil and not self.is_warp then
+        if Next_Scene ~= nil then
           Previous_Scene = Active_Scene
           Active_Scene = Next_Scene
           Next_Scene = nil
@@ -59,8 +59,11 @@ function Transition:draw()
         love.graphics.setLineWidth( 1 )
       end
 
-      if self.timer < 3 and not self.fade then
-        Transition:fadeTo( nil, 3, { 0, 0, 0 } )
+      if self.timer < 5 and not self.is_fade then
+        self.is_fade = true
+        self.fade_color = { 0, 0, 0 }
+        self.fade_in_duration = 2.5
+        self.fade_out_duration = 2.5
       end
       
       -- level transition
@@ -70,18 +73,13 @@ function Transition:draw()
         love.graphics.circle("fill", w / 2, h / 2, 2000 * ( 5 - self.timer ) / 2, 50 )
       elseif self.timer > 2 then
         love.graphics.circle("fill", w / 2, h / 2, 2000, 50 )
-      else
+      elseif self.timer > 0 then
         love.graphics.origin()
-        if Next_Scene ~= nil then
-          Gameplay:load() -- reset the level
-          self.scene_changed = true
-          Previous_Scene = Active_Scene
-          Active_Scene = Next_Scene
-          Next_Scene = nil
-        end
         warpin_sound:play()
         Camera:camOffset()
         love.graphics.circle("fill", w / 2, h / 2, 2000 * (self.timer)/(2), 50)
+      else
+        self.is_warp = false
       end
     end
     if self.is_fade then

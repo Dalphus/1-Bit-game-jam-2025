@@ -37,7 +37,7 @@ end
 
 function love.mousepressed( mouse_x, mouse_y, button )
   if button == 1 then
-    setColor1( math.random(), math.random(), math.random() )
+    -- setColor1( math.random(), math.random(), math.random() )
   end
 
   if Active_Scene.mousepressed then

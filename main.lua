@@ -11,6 +11,7 @@ require( "Scenes.TitleScreen" )
 require( "Scenes.Lore" )
 require( "Scenes.Gameplay" )
 require( "Scenes.Transition" )
+require( "Asteroids" )
 
 function love.load()
   -- Set up the window
@@ -20,6 +21,8 @@ function love.load()
   Color1 = { 1, 1, 1, 1 }
   Color2 = { 0, 0, 0, 1 }
 
+  
+  Asteroid:load()
   Camera:load()
   Title_Screen:load()
   Gameplay:load()

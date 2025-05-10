@@ -121,3 +121,7 @@ function Player:newParticle( _rotation, _lifetime )
     lifetime = _lifetime,
   }
 end
+
+function Player:getPos()
+  return self.x, self.y
+end

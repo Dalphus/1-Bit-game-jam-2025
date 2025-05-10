@@ -3,9 +3,9 @@ require( "helpers" )
 -- Constants
 Player = {
   SIZE = 140,
-  FORWARD_ACCELERATION = 200,
-  STRAFE_ACCELERATION = 150,
-  STRAFE_VECTOR_OFFSET = math.pi / 2.4,
+  FORWARD_ACCELERATION = 400,
+  STRAFE_ACCELERATION = 300,
+  STRAFE_VECTOR_OFFSET = math.pi / 2.4, -- pi / 2 is perpendicular to the forward vector
   DAMPENING = 0.7,
   MAX_SPEED = 200, -- not implemented yet
   PARTICLE_LIFETIME = 0.2,

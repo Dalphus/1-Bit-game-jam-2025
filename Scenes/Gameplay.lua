@@ -7,6 +7,7 @@ require( "Asteroids" )
 Geraldo = Player
 Bullets = {}
 Asteroids = {}
+Fuel_Asteroids = {}
 Screen_Covered = false
 
 -- Constants
@@ -14,7 +15,7 @@ Gameplay = {
   -- Player Physics
   BULLET_LIFETIME = 1,
   BULLET_SIZE = 2,
-  PINBALL_COEFFICIENT = 10,
+  PINBALL_COEFFICIENT = 2,
   -- Asteroids
   LEFT_WALL = -7000,
   RIGHT_WALL = 7000,
@@ -24,10 +25,11 @@ Gameplay = {
   WALL_SHUFFLE = 300,
   LEVEL_DENSITY = 200,
   LEVEL_SHUFFLE_V = 20,
+  SAFE_ZONE = 400,
   -- Visuals
   SCORE_SIZE = 50,
   PARALLAX_CONSTANT = 0.1,
-  SAFE_ZONE = 400,
+  SCANNER_RADIUS = 75
 }
 G = Gameplay
 
@@ -38,6 +40,7 @@ function G.load()
   collide = love.audio.newSource( "Assets/Sounds/collide.mp3", "static" )
 
   Asteroids = {}
+  Fuel_Asteroids = {}
   Geraldo = Player:new( screen_width / 2, screen_height / 2 )
 
   for i = 1, G.LEVEL_DENSITY do
@@ -60,10 +63,17 @@ function G.load()
     table.insert( Asteroids, asteroid )
   end
 
-  -- constant for now
-  table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -300, 0, 300, 0, 0, 0, 0.1))
-  table.insert( Asteroids, Asteroid:new( "tritium_big", -1300, -300, 0, 300, 0, 0, 0, 0.1))
-  table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))
+  for i = 1, 3 do
+    local ast_x = screen_width / 2
+    local ast_y = screen_height / 2
+    while (ast_x > (screen_width / 2) - G.SAFE_ZONE and ast_x < (screen_width / 2) + G.SAFE_ZONE) and (ast_y > (screen_height / 2) - G.SAFE_ZONE and ast_y < (screen_height / 2) + G.SAFE_ZONE) do
+      ast_x = math.random(G.LEFT_WALL, G.RIGHT_WALL)
+      ast_y = math.random(G.BOTTOM_WALL, G.TOP_WALL)
+    end
+    local fuel = Asteroid:new( "tritium_big", ast_x, ast_y, 0, 300, math.random(-G.LEVEL_SHUFFLE_V, G.LEVEL_SHUFFLE_V), math.random(-G.LEVEL_SHUFFLE_V, G.LEVEL_SHUFFLE_V), 0.1 )
+    table.insert( Asteroids, fuel)
+    table.insert( Fuel_Asteroids, fuel)
+  end
 
   star_background_1 = imageToCanvas( "Assets/big-stars-splash.png" )
   warpin_sound = love.audio.newSource("Assets/Sounds/whooshin.mp3", "static")
@@ -127,7 +137,17 @@ function G.draw()
   end
 
   Camera:camOffset()
-  
+
+  local cx = love.graphics.getWidth()/2
+  local cy = love.graphics.getHeight()/2
+
+  -- Fuel pointers
+  for i = 1, #Fuel_Asteroids do
+    local a = Fuel_Asteroids[i]
+    local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
+    love.graphics.circle("fill", cx - (G.SCANNER_RADIUS * math.cos(angle)), cy - (G.SCANNER_RADIUS * math.sin(angle)), 8, 50)
+  end
+
   Camera:center( Geraldo.x, Geraldo.y )
   
   Geraldo:draw()
@@ -178,6 +198,15 @@ function G.update( dt )
     if a.health <= 0 then
       a:destroy()
       table.remove( Asteroids, i )
+
+      if a.type == "tritium_big" or a.type == "tritium_shard" then -- replace at some point
+          for ii = 1, #Fuel_Asteroids do
+            if a == Fuel_Asteroids[ii] then
+              table.remove(Fuel_Asteroids, ii)
+            end
+          end
+        end
+
       break
     end
   end
@@ -192,7 +221,14 @@ function G.update( dt )
       a:destroy()
       
       -- for fuel, don't do anything but destroy the object.
-      if a.type == "tritium_shard" then Good_Collision = true end
+      if a.type == "tritium_shard" then
+        for ii = 1, #Fuel_Asteroids do
+          if a == Fuel_Asteroids[ii] then
+            table.remove(Fuel_Asteroids, ii)
+          end
+        end
+        Good_Collision = true 
+      end
       table.remove( Asteroids, i )
       if Good_Collision then return end
       
@@ -205,8 +241,8 @@ function G.update( dt )
       boomsound:play()
       -- throw player back
       local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
-      Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * G.PINBALL_COEFFICIENT
-      Geraldo.vy = Geraldo.vy + math.sin( angle ) * a.size * G.PINBALL_COEFFICIENT
+      Geraldo.vx = Geraldo.vx + math.cos( angle ) * math.sqrt(Geraldo.vx^2 + Geraldo.vy^2) * G.PINBALL_COEFFICIENT
+      Geraldo.vy = Geraldo.vy + math.sin( angle ) * math.sqrt(Geraldo.vx^2 + Geraldo.vy^2) * G.PINBALL_COEFFICIENT
       break
     end
   end

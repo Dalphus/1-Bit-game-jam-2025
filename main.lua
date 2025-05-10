@@ -28,6 +28,7 @@ function love.load()
   Next_Scene = nil
   Previous_Scene = nil
   Transition_Timer = -1
+  Transition_Duration = -1
   Level_Score = 0
 
   -- Pick random seed
@@ -95,7 +96,7 @@ function love.update( dt )
   -- change scene
   if Transition_Timer > 0 then
     Transition_Timer = Transition_Timer - dt
-    if Transition_Timer <= 0 then
+    if Transition_Timer <= Transition_Duration / 2 then
       -- change scene
       Previous_Scene = Active_Scene
       Active_Scene = Next_Scene

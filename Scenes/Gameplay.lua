@@ -15,6 +15,12 @@ BULLET_SIZE = 2
 PINBALL_COEFFICIENT = 10
 SCORE_SIZE = 50
 PARALLAX_CONSTANT = 0.1
+LEFT_WALL = -7000
+RIGHT_WALL = 7000
+TOP_WALL = 7000
+BOTTOM_WALL = -7000
+WALL_DENSITY = 50
+WALL_SHUFFLE = 300
 
 Gameplay = {
   load = function()
@@ -32,6 +38,30 @@ Gameplay = {
 
     Score_Image =  imageToCanvas( "Assets/fuelBig.png" )
     sw, sh = Score_Image:getDimensions()
+
+    -- top border
+    for i = 1, WALL_DENSITY do
+      local offset = (love.math.random() - 0.5) * WALL_SHUFFLE
+      table.insert( Asteroids, Asteroid:new( "normal_big", offset + LEFT_WALL + ((RIGHT_WALL - LEFT_WALL) * i / WALL_DENSITY), offset + TOP_WALL, 0, 500, 0, 0, 0, 100))
+    end
+
+    -- left border
+    for i = 1, WALL_DENSITY do
+      local offset = (love.math.random() - 0.5) * WALL_SHUFFLE
+      table.insert( Asteroids, Asteroid:new( "normal_big", offset + LEFT_WALL, offset + BOTTOM_WALL + ((TOP_WALL - BOTTOM_WALL) * i / WALL_DENSITY), 0, 500, 0, 0, 0, 100))
+    end
+
+    -- bottom border
+    for i = 1, WALL_DENSITY do
+      local offset = (love.math.random() - 0.5) * WALL_SHUFFLE
+      table.insert( Asteroids, Asteroid:new( "normal_big", offset + LEFT_WALL + ((RIGHT_WALL - LEFT_WALL) * i / WALL_DENSITY), offset + BOTTOM_WALL, 0, 500, 0, 0, 0, 100))
+    end
+
+    -- right border
+    for i = 1, WALL_DENSITY do
+      local offset = (love.math.random() - 0.5) * WALL_SHUFFLE
+      table.insert( Asteroids, Asteroid:new( "normal_big", offset + RIGHT_WALL, offset + BOTTOM_WALL + ((TOP_WALL - BOTTOM_WALL) * i / WALL_DENSITY), 0, 500, 0, 0, 0, 100))
+    end
   end,
 
   mousepressed = function( x, y, button )
@@ -45,12 +75,10 @@ Gameplay = {
     local bg_offset_y = -1250 -- Geraldo.y - (Geraldo.y % 2500) - (love.graphics.getHeight()/2)
     
     -- Should look into a way to get this to repeat
-    -- paralax slow section
-    Camera:camOffset(PARALLAX_CONSTANT)
-    Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT )
+    -- paralax still section
     love.graphics.draw(star_background_1, bg_offset_x - 200, bg_offset_y, 0, 5, 5)
 
-    -- paralax mid section
+    -- paralax slow section
     Camera:camOffset(PARALLAX_CONSTANT)
     Camera:center( Geraldo.x, Geraldo.y, PARALLAX_CONSTANT )
     love.graphics.draw(star_background_1, bg_offset_x, bg_offset_y - 250, 0, 5, 5)

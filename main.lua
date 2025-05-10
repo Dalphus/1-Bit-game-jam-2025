@@ -58,19 +58,13 @@ function love.mousemoved( mouse_x, mouse_y, dx, dy, force )
 end
 
 function love.keypressed( key, scancode, isrepeat )
-  -- quit game if escape is pressed
   if scancode == "escape" then
     love.event.quit()
   end
   
   if scancode == "space" then
-    print( love.graphics.getWidth(), love.graphics.getHeight() )
-    Level_Score = 3
-    -- fire bullet
-  end
-
-  if scancode == "space" then
     Camera:shake( 10, 0.5 )
+    Level_Score = 3
   end
 
   if Active_Scene.keypressed then
@@ -85,7 +79,6 @@ function love.draw()
   Camera:draw()
   Active_Scene.draw()
 
-  love.graphics.origin()
   Transition:draw()
 end
 

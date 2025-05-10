@@ -33,11 +33,10 @@ function Transition:update( dt )
 end
 
 function Transition:draw()
+  love.graphics.origin()
   if self.timer > 0 then
     love.graphics.setColor( unpack( self.fade_color ))
-    print( unpack( self.fade_color ))
-    love.graphics.setBlendMode( "alpha" )
-    love.graphics.rectangle( "fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight() )
+    love.graphics.rectangle( "fill", 0, 0, love.graphics.getDimensions() )
   end
 end
 

@@ -3,7 +3,6 @@ Transition = {
   fade_out_duration = 0,
   fade_color = { 0, 0, 0 },
   timer = -1,
-  scene_changed = true,
   is_fade = false,
   is_warp = false,
 }
@@ -22,10 +21,10 @@ function Transition:update( dt )
         alpha = 1 - (self.timer - self.fade_out_duration) / self.fade_in_duration
 
       elseif self.timer > 0 then
-        if not self.scene_changed then
-          self.scene_changed = true
+        if Next_Scene ~= nil and not self.is_warp then
           Previous_Scene = Active_Scene
           Active_Scene = Next_Scene
+          Next_Scene = nil
         end
 
         alpha = (self.timer / self.fade_out_duration)
@@ -43,10 +42,6 @@ function Transition:draw()
   love.graphics.origin()
 
   if self.timer > 0 then
-    if self.is_fade then
-      love.graphics.setColor( unpack( self.fade_color ))
-      love.graphics.rectangle( "fill", 0, 0, love.graphics.getDimensions() )
-    end
     if self.is_warp then
       local w, h = love.graphics.getDimensions()
       useColor1()
@@ -63,6 +58,11 @@ function Transition:draw()
         end
         love.graphics.setLineWidth( 1 )
       end
+
+      if self.timer < 3 and not self.fade then
+        Transition:fadeTo( nil, 3, { 0, 0, 0 } )
+      end
+      
       -- level transition
       if self.timer > 5 then
       -- left blank intentionally
@@ -72,15 +72,22 @@ function Transition:draw()
         love.graphics.circle("fill", w / 2, h / 2, 2000, 50 )
       else
         love.graphics.origin()
-        if not self.scene_changed then
+        if Next_Scene ~= nil then
           Gameplay:load() -- reset the level
           self.scene_changed = true
+          Previous_Scene = Active_Scene
           Active_Scene = Next_Scene
+          Next_Scene = nil
         end
         warpin_sound:play()
         Camera:camOffset()
         love.graphics.circle("fill", w / 2, h / 2, 2000 * (self.timer)/(2), 50)
       end
+    end
+    if self.is_fade then
+      love.graphics.origin()
+      love.graphics.setColor( unpack( self.fade_color ))
+      love.graphics.rectangle( "fill", 0, 0, love.graphics.getDimensions() )
     end
   end
 end
@@ -91,16 +98,16 @@ function Transition:fadeTo( scene, duration, color )
   self.fade_in_duration = duration / 2
   self.fade_out_duration = duration / 2
   self.timer = duration
-  self.scene_changed = false
 
-  Next_Scene = scene
-  Previous_Scene = Active_Scene
+  if scene ~= nil then
+    Next_Scene = scene
+    Previous_Scene = Active_Scene
+  end
 end
 
 function Transition:warpTo( scene, duration )
   self.is_warp = true
   self.timer = duration
-  self.scene_changed = false
 
   Next_Scene = scene
   Previous_Scene = Active_Scene

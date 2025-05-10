@@ -29,7 +29,8 @@ Gameplay = {
   -- Visuals
   SCORE_SIZE = 50,
   PARALLAX_CONSTANT = 0.1,
-  SCANNER_RADIUS = 75
+  SCANNER_RADIUS = 75,
+  LEVEL_TRANSITION_DURATION = 7.8,
 }
 G = Gameplay
 
@@ -186,7 +187,7 @@ function G.update( dt )
     -- Check score
     if Level_Score >= 3 then
       Level_Score = 0
-      Transition:warpTo( Title_Screen, 8.26 )
+      Transition:warpTo( Title_Screen, G.LEVEL_TRANSITION_DURATION )
       local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
       into_lightspeed:play()
     end

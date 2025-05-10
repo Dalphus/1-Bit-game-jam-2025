@@ -7,11 +7,15 @@ end
 
 function GameOver.keypressed(key, scancode, isrepeat)
   if scancode == "space" or scancode == "return" and Transition.timer <= 0 then
+    Gameplay:load()
+    G.LEVEL_DENSITY = 200
+    Lore:load()
     Transition:fadeTo( Title_Screen, 3.5, { 0, 0, 0 } )
   end
 end
 
 function GameOver.draw()
+  setColor2( 0, 0, 0 )
   local text1 = love.graphics.newText( GameOver.font, "GAME OVER" )
   
   local text2 = love.graphics.newText( GameOver.font_small, "You have been defeated." )

@@ -31,7 +31,7 @@ function love.load()
   Asteroid:load()
   Upgrade:load()
   GameOver.load()
-  Active_Scene = Gameplay
+  Active_Scene = Title_Screen
 
   Level_Score = 0
 
@@ -68,9 +68,9 @@ function love.keypressed( key, scancode, isrepeat )
     love.event.quit()
   end
   
-  if scancode == "h" then
+  if scancode == "f12" then
     Camera:shake( 10, 0.5 )
-    Level_Score = 3
+    Level_Score = 4
   end
 
   if Active_Scene.keypressed then

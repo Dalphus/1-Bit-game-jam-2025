@@ -24,6 +24,7 @@ function Upgrade.keypressed( key, scancode, isrepeat )
 end
 
 function Upgrade.draw()
+  setColor2( 0, 0, 0 )
   useColor1()
   love.graphics.setFont( Upgrade.font )
   love.graphics.print( Upgrade.text[ 1 ], 25, 25 + Upgrade.font_size )

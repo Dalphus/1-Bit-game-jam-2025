@@ -15,7 +15,7 @@ Gameplay = {
   -- Player Physics
   BULLET_LIFETIME = 1,
   BULLET_SIZE = 2,
-  PINBALL_COEFFICIENT = 1.2,
+  PINBALL_COEFFICIENT = 1.9,
   -- Asteroids
   LEFT_WALL = -7000,
   RIGHT_WALL = 7000,
@@ -37,7 +37,7 @@ Gameplay = {
   enter_animation_duration = 3,
 
   current_level = 1,
-  level_max_time = 123
+  level_max_time = 33
 }
 G = Gameplay
 
@@ -309,4 +309,14 @@ function G.update( dt )
       table.remove( Bullets, i )
     end
   end
+
+  if G.level_max_time - G.level_timer < 30 then
+    Camera:shake( 10, 0.5 )
+    local color = 1 - ( G.level_max_time - G.level_timer ) / 30
+    setColor2( 0, color * .5, color * .5 )
+  end
+  if G.level_max_time - G.level_timer < 5 then
+    Camera:shake( 18, 0.5 )
+  end
+
 end

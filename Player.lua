@@ -12,6 +12,7 @@ Player = {
   PARTICLE_SIZE = 10, -- multiplied by lifetime
   PARTICLE_DISTANCE = 70,
   PARTICLE_SPEED = 700,
+  health = 10,
 }
 Player.__index = Player
 
@@ -22,8 +23,7 @@ function Player:new( x, y )
     rotation = 0,
     vx = 0,
     vy = 0,
-    particles = {},
-    health = 10,
+    particles = {}
   }
 
   love.graphics.origin()

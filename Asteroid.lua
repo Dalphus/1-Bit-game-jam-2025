@@ -65,7 +65,7 @@ function Asteroid:draw()
   end
   local w, h = self.image:getDimensions()
   love.graphics.draw( self.image, self.x, self.y, self.rotation, self.size / w, self.size / h, w / 2, h / 2 )
-  love.graphics.circle( "line", self.x, self.y, self.size / 2 )
+  -- love.graphics.circle( "line", self.x, self.y, self.size / 2 )
 end
 
 function Asteroid:update( dt )

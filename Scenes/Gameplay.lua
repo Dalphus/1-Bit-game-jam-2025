@@ -37,7 +37,7 @@ Gameplay = {
   enter_animation_duration = 3,
 
   current_level = 1,
-  level_max_time = 33
+  level_max_time = 123
 }
 G = Gameplay
 
@@ -166,7 +166,7 @@ function G.draw()
   Geraldo:draw()
 
   -- show origin of asteroid field
-  love.graphics.circle("fill", 0, 0, 25, 50)
+  -- love.graphics.circle("fill", 0, 0, 25, 50)
   
   for i = 1, #Asteroids do
     local a = Asteroids[ i ]

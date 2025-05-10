@@ -21,17 +21,34 @@ TOP_WALL = 7000
 BOTTOM_WALL = -7000
 WALL_DENSITY = 50
 WALL_SHUFFLE = 300
+LEVEL_DENSITY = 200
+LEVEL_SHUFFLE_V = 10
+SAFE_ZONE = 400
 
 Gameplay = {
   load = function()
+    local screen_width = love.graphics.getWidth()
+    local screen_height = love.graphics.getHeight()
+    
     collide = love.audio.newSource("Assets/Sounds/collide.mp3", "static")
     
     Asteroids = {}
     
     Asteroid:load()
-    Geraldo = Player:new( love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 )
+    Geraldo = Player:new( screen_width / 2, screen_height / 2 )
 
-    table.insert( Asteroids, Asteroid:new( "normal_big", 100, 100, 0, 500, 10, 10, 0.1 ))
+    for i = 1, LEVEL_DENSITY do
+      local ast_x = screen_width / 2
+      local ast_y = screen_height / 2
+      while (ast_x > (screen_width / 2) - SAFE_ZONE and ast_x < (screen_width / 2) + SAFE_ZONE) and (ast_y > (screen_height / 2) - SAFE_ZONE and ast_y < (screen_height / 2) + SAFE_ZONE) do
+        ast_x = math.random(LEFT_WALL, RIGHT_WALL)
+        ast_y = math.random(BOTTOM_WALL, TOP_WALL)
+      end
+      table.insert( Asteroids, Asteroid:new( "normal_big", ast_x, ast_y, 0, 500, math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), math.random(-LEVEL_SHUFFLE_V, LEVEL_SHUFFLE_V), 0 ))
+    end
+    
+
+    -- constant for now
     table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -300, 0, 300, 0, 0, 0, 0.1))
     table.insert( Asteroids, Asteroid:new( "tritium_big", -1300, -300, 0, 300, 0, 0, 0, 0.1))
     table.insert( Asteroids, Asteroid:new( "tritium_big", -300, -1300, 0, 300, 0, 0, 0, 0.1))

@@ -187,7 +187,7 @@ function G.update( dt )
     -- Check score
     if Level_Score >= 3 then
       Level_Score = 0
-      Transition:warpTo( Title_Screen, G.LEVEL_TRANSITION_DURATION )
+      Transition:warpTo( Upgrade, G.LEVEL_TRANSITION_DURATION )
       local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
       into_lightspeed:play()
     end

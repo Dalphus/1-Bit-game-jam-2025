@@ -11,6 +11,7 @@ require( "Scenes.TitleScreen" )
 require( "Scenes.Lore" )
 require( "Scenes.Gameplay" )
 require( "Scenes.Transition" )
+require( "Scenes.Upgrades" )
 require( "Asteroid" )
 
 function love.load()
@@ -27,6 +28,7 @@ function love.load()
   Lore.load()
   Gameplay:load()
   Asteroid:load()
+  Upgrade:load()
   Active_Scene = Title_Screen
 
   Level_Score = 0

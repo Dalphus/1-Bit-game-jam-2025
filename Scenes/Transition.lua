@@ -71,15 +71,14 @@ function Transition:draw()
       -- left blank intentionally
       elseif self.timer > 3 then
         love.graphics.circle("fill", w / 2, h / 2, 2000 * ( 5 - self.timer ) / 2, 50 )
-      elseif self.timer > 2 then
+      elseif self.timer > 2.5 then
         love.graphics.circle("fill", w / 2, h / 2, 2000, 50 )
-      elseif self.timer > 0 then
-        love.graphics.origin()
-        warpin_sound:play()
-        Camera:camOffset()
-        love.graphics.circle("fill", w / 2, h / 2, 2000 * (self.timer)/(2), 50)
       else
         self.is_warp = false
+        warpin_sound:play()
+        -- love.graphics.origin()
+        -- Camera:camOffset()
+        -- love.graphics.circle("fill", w / 2, h / 2, 2000 * (self.timer)/(2), 50)
       end
     end
     if self.is_fade then

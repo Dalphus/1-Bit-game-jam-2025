@@ -26,6 +26,8 @@ function Player:new( x, y )
     health = 10,
   }
 
+  love.graphics.origin()
+
   player.image = imageToCanvas( "Assets/shipNEW.png", Player.SIZE, math.pi / 2 )
   player.decal = imageToCanvas( "Assets/pixel.png", 8 )
   player.shoot_audio = love.audio.newSource("Assets/Sounds/gun.mp3", "static")

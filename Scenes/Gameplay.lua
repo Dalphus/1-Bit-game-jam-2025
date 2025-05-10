@@ -28,7 +28,6 @@ Gameplay = {
   SCORE_SIZE = 50,
   PARALLAX_CONSTANT = 0.1,
   SAFE_ZONE = 400,
-  -- Warp Animation
 }
 G = Gameplay
 
@@ -92,6 +91,7 @@ function G.mousepressed( x, y, button )
 end
 
 function G.draw()
+  
   local bg_offset_x = -1250 -- Geraldo.x - (Geraldo.x % 2500) - (love.graphics.getWidth()/2)
   local bg_offset_y = -1250 -- Geraldo.y - (Geraldo.y % 2500) - (love.graphics.getHeight()/2)
   
@@ -101,50 +101,40 @@ function G.draw()
   Camera:camOffset( G.PARALLAX_CONSTANT * 0.1 )
   Camera:center( Geraldo.x, Geraldo.y, G.PARALLAX_CONSTANT * 0.1 )
   love.graphics.draw( star_background_1, bg_offset_x - 200, bg_offset_y, 0, 5, 5 )
-
+  
   -- paralax slow section
   Camera:camOffset( G.PARALLAX_CONSTANT )
   Camera:center( Geraldo.x, Geraldo.y, G.PARALLAX_CONSTANT )
   love.graphics.draw( star_background_1, bg_offset_x, bg_offset_y - 250, 0, 5, 5 )
-
+  
   -- paralax fast section
   Camera:camOffset( G.PARALLAX_CONSTANT )
   Camera:center( Geraldo.x, Geraldo.y, G.PARALLAX_CONSTANT )
   love.graphics.draw( star_background_1, bg_offset_x, bg_offset_y, 0, 5, 5 )
-
+  
   -- reset graphics transforms
   love.graphics.origin()
   
   -- draw collected resources
   if Level_Score > 0 then
-    love.graphics.draw( Score_Image, love.graphics.getWidth() - (SCORE_SIZE * 0.6), 30, 0, SCORE_SIZE / sw, SCORE_SIZE / sh, sw / 2, sh / 2 )
+    love.graphics.draw( Score_Image, love.graphics.getWidth() - (G.SCORE_SIZE * 0.6), 30, 0, G.SCORE_SIZE / sw, G.SCORE_SIZE / sh, sw / 2, sh / 2 )
     if Level_Score > 1 then
-      love.graphics.draw( Score_Image, love.graphics.getWidth() - (SCORE_SIZE * 1.8), 30, 0, SCORE_SIZE / sw, SCORE_SIZE / sh, sw / 2, sh / 2 )
+      love.graphics.draw( Score_Image, love.graphics.getWidth() - (G.SCORE_SIZE * 1.8), 30, 0, G.SCORE_SIZE / sw, G.SCORE_SIZE / sh, sw / 2, sh / 2 )
       if Level_Score > 2 then
-        love.graphics.draw( Score_Image, love.graphics.getWidth() - (SCORE_SIZE * 3.0), 30, 0, SCORE_SIZE / sw, SCORE_SIZE / sh, sw / 2, sh / 2 )
+        love.graphics.draw( Score_Image, love.graphics.getWidth() - (G.SCORE_SIZE * 3.0), 30, 0, G.SCORE_SIZE / sw, G.SCORE_SIZE / sh, sw / 2, sh / 2 )
       end
     end
   end
-  
+
   Camera:camOffset()
-
-  -- Fuel celebration
-  if 6 > Transition.timer and Transition.timer > 4 then
-    useColor1()
-    local x1, y1 = Geraldo:getPos()
-    love.graphics.setLineWidth( 7 )
-    for i = 1, 6 do
-      local x2 = x1 + ( 6 - Transition.timer ) * 800 * math.cos( i * math.pi / 3 )
-      local y2 = y1 + ( 6 - Transition.timer ) * 800 * math.sin( i * math.pi / 3 )
-      love.graphics.line(x1, y1, x2, y2)
-    end 
-    love.graphics.setLineWidth( 1 )
-  end
-
+  
   Camera:center( Geraldo.x, Geraldo.y )
-
+  
   Geraldo:draw()
 
+  -- show origin of asteroid field
+  love.graphics.circle("fill", 0, 0, 25, 50)
+  
   for i = 1, #Asteroids do
     local a = Asteroids[ i ]
     a:draw()
@@ -153,31 +143,6 @@ function G.draw()
   for i = 1, #Bullets do
     local b = Bullets[ i ]
     love.graphics.draw( Geraldo.decal, b.x + G.BULLET_SIZE / 2, b.y + G.BULLET_SIZE / 2, b.rotation, G.BULLET_SIZE, G.BULLET_SIZE, Geraldo.decal:getWidth() / 2, Geraldo.decal:getHeight() / 2 )
-  end
-
-  -- show origin of asteroid field
-  love.graphics.circle("fill", 0, 0, 25, 50)
-
-  -- level transition
-  if Transition.timer > 5 then
-    -- purposefully empty
-  elseif Transition.timer > 3 then
-    love.graphics.origin() -- reset coordinate changes
-    Camera:camOffset()
-    love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (5 - Transition.timer)/(2), 50)
-  elseif Transition.timer > 2 then
-    love.graphics.origin() -- reset coordinate changes
-    love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000, 50)
-    Screen_Covered = true
-  elseif Transition.timer > 0 then
-    love.graphics.origin() -- reset coordinate changes
-    if Screen_Covered then 
-      Gameplay:load() -- reset the level
-      Screen_Covered = false
-    end
-    warpin_sound:play()
-    Camera:camOffset()
-    love.graphics.circle("fill", love.graphics.getWidth()/2, love.graphics.getHeight()/2, 2000 * (Transition.timer)/(2), 50)
   end
 end
 
@@ -201,8 +166,7 @@ function G.update( dt )
     -- Check score
     if Level_Score >= 3 then
       Level_Score = 0
-      Next_Scene = Gameplay
-      Transition.timer = 8.26
+      Transition:warpTo( "Title_Screen", 8.26 )
       local into_lightspeed = love.audio.newSource("Assets/Sounds/sci-fi-chargeup.mp3", "static")
       into_lightspeed:play()
     end
@@ -241,8 +205,8 @@ function G.update( dt )
       boomsound:play()
       -- throw player back
       local angle = math.atan2( Geraldo.y - a.y, Geraldo.x - a.x )
-      Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * PINBALL_COEFFICIENT
-      Geraldo.vy = Geraldo.vy + math.sin( angle ) * a.size * PINBALL_COEFFICIENT
+      Geraldo.vx = Geraldo.vx + math.cos( angle ) * a.size * G.PINBALL_COEFFICIENT
+      Geraldo.vy = Geraldo.vy + math.sin( angle ) * a.size * G.PINBALL_COEFFICIENT
       break
     end
   end

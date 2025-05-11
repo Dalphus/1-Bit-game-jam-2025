@@ -1,2 +1,6 @@
 garbage.lua
 *.mkd
+.direnv/
+.vscode/settings.json
+game/log.txt
+

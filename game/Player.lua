@@ -1,5 +1,3 @@
-require( "helpers" )
-
 -- Constants
 Player = {
   SIZE = 140,

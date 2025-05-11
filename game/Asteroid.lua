@@ -11,8 +11,8 @@ function Asteroid:load()
     normal_small_1 = imageToCanvas( "Assets/fragmentOne.png" ),
     normal_small_2 = imageToCanvas( "Assets/fragmentTwo.png" ),
     normal_small_3 = imageToCanvas( "Assets/fragmentThree.png" ),
-    tritium_big =    imageToCanvas( "Assets/fuelBig.png" ),
-    tritium_shard =  imageToCanvas( "Assets/fuelBig.png" ),
+    tritium_big =    imageToCanvas( "Assets/fuelBIG.png" ),
+    tritium_shard =  imageToCanvas( "Assets/fuelBIG.png" ),
   }
 end
 

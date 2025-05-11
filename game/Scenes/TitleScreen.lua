@@ -1,6 +1,3 @@
-require( "helpers" )
-require( "UI.Button" )
-
 -- Title Buttons are globals cause it's just easier that way
 Start_button = Button:new( 570, 600, 300, 200 )
 Color_button = Button:new( 570, 600, 1000, 200 )

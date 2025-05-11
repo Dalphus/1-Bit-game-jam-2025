@@ -1,8 +1,3 @@
-require( "helpers" )
-require( "UI.Button" )
-require( "Player" )
-require( "Asteroid" )
-
 -- Globals
 Geraldo = Player
 Bullets = {}
@@ -83,7 +78,7 @@ function G.load()
       ast_x = math.random(G.LEFT_WALL, G.RIGHT_WALL)
       ast_y = math.random(G.BOTTOM_WALL, G.TOP_WALL)
     end
-    local fuel = Asteroid:new( "tritium_big", ast_x, ast_y, 0, 300, math.random(-G.LEVEL_SHUFFLE_V, G.LEVEL_SHUFFLE_V), math.random(-G.LEVEL_SHUFFLE_V, G.LEVEL_SHUFFLE_V), 0.1 )
+    local fuel = Asteroid:new( "tritium_big", ast_x, ast_y, 0, 300, 0, 0, 0.1 )
     table.insert( Asteroids, fuel)
     table.insert( Fuel_Asteroids, fuel)
   end
@@ -198,7 +193,7 @@ function G.draw()
   local milliseconds_remaining = math.floor(( G.level_max_time - G.level_timer ) * 1000 )
   local clock_text = ""
   if seconds_remaining > 60 then
-    clock_text = string.format( "%2d:%02d", minutes_remaining, seconds_remaining % 60 )
+    clock_text = string.format( "%1d:%02d", minutes_remaining, seconds_remaining % 60 )
   else
     clock_text = string.format( "%2d.%003d", seconds_remaining % 60, milliseconds_remaining % 1000 )
   end

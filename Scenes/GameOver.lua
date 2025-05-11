@@ -11,6 +11,7 @@ function GameOver.keypressed(key, scancode, isrepeat)
     G.LEVEL_DENSITY = 200
     Lore:load()
     Transition:fadeTo( Title_Screen, 3.5, { 0, 0, 0 } )
+    Player.health = 10
   end
 end
 

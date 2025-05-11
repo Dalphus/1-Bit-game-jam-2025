@@ -49,7 +49,7 @@ function Player:draw()
 end
 
 function Player:damage( amount )
-  self.health = self.health - amount
+  Player.health = Player.health - amount
   -- play sound of some sort
 end
 

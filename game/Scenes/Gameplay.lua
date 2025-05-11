@@ -86,7 +86,7 @@ function G.load()
   star_background_1 = imageToCanvas( "Assets/big-stars-splash.png" )
   warpin_sound = love.audio.newSource("Assets/Sounds/whooshin.mp3", "static")
 
-  Score_Image =  imageToCanvas( "Assets/fuelBig.png" )
+  Score_Image =  imageToCanvas( "Assets/fuelBIG.png" )
   sw, sh = Score_Image:getDimensions()
 
   for i = 1, G.WALL_DENSITY do
